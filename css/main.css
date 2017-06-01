@@ -2,28 +2,35 @@ body {
     background:#eee;
     margin:0;
     font-family: Arial;
+    padding: 0px 20px 20px 360px;
 }
 
 canvas {
     display:block;
 }
 
-textarea {
-    margin:0 0 10px !important;
+h3 .glyphicon {
+    margin-right:0.5em;
+    font-size:80%;
 }
 
 .title {
     margin-top:0;
 }
 
+.controls h4 {
+    border-top: 1px solid #ccc;
+    padding: 5px 10px;
+    background: #ddd;
+    color: #333 !important;
+    font-size: 14px !important;
+}
+
 .renderer {
-    position:absolute;
-    top:10px;
-    right:10px;
-    left:310px;
     height:200px;
     border:1px dotted #ccc;
     border-radius: 4px;
+    margin-bottom:10px;
 }
 
 .renderer canvas {
@@ -32,12 +39,11 @@ textarea {
 }
 
 .code-display {
-    position:absolute;
-    top:220px;
-    right:10px;
-    bottom:0px;
-    left:310px;
     border: 0;
+}
+
+.code-display code {
+    min-height: 200px;
 }
 
 .controls {
@@ -46,10 +52,10 @@ textarea {
     top:0;
     height:100%;
     overflow:auto;
-    background:#fff;
+    background:#eee;
     padding:10px;
     font-size:12px;
-    width:300px;
+    width:340px;
     -webkit-user-select:none;
     user-select:none;
     box-sizing: border-box;
@@ -65,4 +71,21 @@ textarea {
 
 .check {
     margin-right:5px !important;
+    margin-top:8px !important;
+}
+
+.controls::-webkit-scrollbar {
+  width: 5px;
+}
+
+.controls::-webkit-scrollbar-thumb:vertical {
+  margin: 5px;
+  background-color: #999;
+  -webkit-border-radius: 5px;
+}
+
+.controls::-webkit-scrollbar-button:start:decrement,
+.controls::-webkit-scrollbar-button:end:increment {
+  height: 5px;
+  display: block;
 }

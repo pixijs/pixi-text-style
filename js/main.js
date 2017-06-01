@@ -14,6 +14,103 @@ PIXI.TextStyle.prototype.toJSON = function() {
 };
 
 /**
+ * Base control for style elements
+ * @class StyleControl
+ */
+class StyleControl {
+    constructor(vnode) {
+        this.parent = vnode.attrs.parent;
+        this.id = vnode.attrs.id;
+        this.name = vnode.attrs.name;
+    }
+    view() {
+        const id = this.id;
+        // Wrap around all elements
+        return m('div.row', [
+            m('label.col-sm-5', {for: id, title: id}, this.name),
+            m('div.col-sm-7', [ this.init() ])
+        ]);
+    }
+    update(value) {
+        if (/^\-?\d+$/.test(value)) {
+            value = parseInt(value);
+        }
+        else if(/^\-?\d*\.\d+$/.test(value)) {
+            value = parseFloat(value);
+        }
+        this.parent.style[this.id] = value;
+        this.parent.app.render();
+    }
+
+    init() {
+        // override
+    }
+}
+
+/**
+ * Select element with options
+ * @class StyleSelect
+ * @extends StyleControl
+ */
+class StyleSelect extends StyleControl {
+    constructor(vnode) {
+        super(vnode);
+        this.options = vnode.attrs.options.map(value => {
+            name = value;
+            if (Array.isArray(value)) {
+                name = value[1];
+                value = String(value[0]);
+            }
+            return m('option', {value: value}, name);
+        });
+    }
+    init() {
+        return m('select.form-control.input-sm#'+this.id, {
+            key: this.id,
+            oninput: m.withAttr('value', (value) => {
+                this.update(value);
+            }),
+            value: this.parent.style[this.id]
+        },
+        this.options);
+    }
+}
+
+/**
+ * Input checkbox with boolean output
+ * @class StyleCheckbox
+ * @extends StyleControl
+ */
+class StyleCheckbox extends StyleControl {
+    init() {
+        return m('input.check[type=checkbox]#'+this.id, {
+            key: this.id,
+            onchange: m.withAttr('checked', (value) => {
+                this.update(value);
+            }),
+            checked: this.parent.style[this.id]
+        });
+    }
+}
+
+/**
+ * Input number selector
+ * @class StyleNumber
+ * @extends StyleControl
+ */
+class StyleNumber extends StyleControl {
+    init() {
+        return m('input.form-control.input-sm.number[type=number]#'+this.id, {
+            key: this.id,
+            oninput: m.withAttr('value', (value) => {
+                this.update(value);
+            }),
+            value: this.parent.style[this.id]
+        });
+    }
+}
+
+/**
  * TextStyle Component for Mithril
  * @class TextStyleComponent
  */
@@ -34,6 +131,16 @@ class TextStyleComponent {
                 this.style[prop] = style[prop];
             }
         }
+
+        this.app = new PIXI.Application({
+            width: 400,
+            height: 100,
+            backgroundColor: 0xEEEEEE,
+            roundPixels: true,
+            resolution: devicePixelRatio
+        });
+        this.app.stage.addChild(this.text);
+        this.app.stop();
     }
 
     view() {
@@ -62,11 +169,9 @@ class TextStyleComponent {
 
         return m('main', {oncreate: init}, [
             m('nav.controls.container-fluid', [
-                m('h3.title', [
-                    m('a', {href:'//pixijs.download/release/docs/PIXI.TextStyle.html'}, 'PixiJS TextStyle')
-                ]),
+                m('h3.title', 'PixiJS TextStyle'),
+                m('h4', 'Text'),
                 m('div.row', [
-                    m('label.col-sm-12', {for: 'input'}, 'Text'),
                     m('div.col-sm-12', [
                         m('textarea.form-control#input', {
                             autofocus: true,
@@ -75,6 +180,8 @@ class TextStyleComponent {
                         })
                     ])
                 ]),
+                
+                m('h4', 'Font'),
                 this.select('fontFamily', 'Font Family', [
                     'Arial',
                     'Arial Black',
@@ -88,12 +195,6 @@ class TextStyleComponent {
                     'Verdana'
                 ]),
                 this.number('fontSize', 'Font Size'),
-                this.select('align', 'Align', [
-                    'left',
-                    'center',
-                    'right'
-                ]),
-                this.select('fill', 'Fill', colors),
                 this.select('fontStyle', 'Font Style', [
                     'normal',
                     'italic',
@@ -118,12 +219,20 @@ class TextStyleComponent {
                     '800',
                     '900'
                 ]),
-                this.select('lineJoin', 'Line Join', [
-                    'miter',
-                    'round',
-                    'bevel'
+
+                m('h4', 'Fill'),
+                this.select('fill', 'Color', colors),
+                this.select('fillGradientType', 'Gradient Type', [
+                    [0, 'linear vertical'],
+                    [1, 'linear horiztonal']
                 ]),
-                this.number('miterLimit', 'Miter Limit'),
+
+                m('h4', 'Stroke'),
+                this.select('stroke', 'Color', colors),
+                this.number('strokeThickness', 'Stroke Thickness'),
+
+                m('h4', 'Layout'),
+                this.number('letterSpacing', 'Letter Spacing'),
                 this.select('textBaseline', 'Text Baseline', [
                     'alphabetic',
                     'bottom',
@@ -131,27 +240,48 @@ class TextStyleComponent {
                     'top',
                     'hanging'
                 ]),
-                this.select('stroke', 'Stroke', colors),
-                this.number('strokeThickness', 'Stroke Thickness'),
-                this.number('fillGradientType', 'Gradient Type'),
-                this.number('letterSpacing', 'Letter Spacing'),
-                this.number('lineHeight', 'Line Height'),
-                this.number('padding', 'Padding'),
+
+                m('h4', 'Drop Shadow'),
+                this.checkbox('dropShadow', 'Enable'),
                 this.number('dropShadowAlpha', 'Shadow Alpha'),
                 this.number('dropShadowAngle', 'Shadow Angle'),
                 this.number('dropShadowBlur', 'Shadow Blur'),
                 this.number('dropShadowDistance', 'Shadow Distance'),
-                this.number('wordWrapWidth', 'Wrap Width'),
-                this.checkbox('wordWrap', 'Word Wrap'),
-                this.checkbox('dropShadow', 'Drop Shadow'),
+                
+                m('h4', 'Multiline'),
+                this.checkbox('wordWrap', 'Enable'),
                 this.checkbox('breakWords', 'Break Words'),
+                this.select('align', 'Align', [
+                    'left',
+                    'center',
+                    'right'
+                ]),
+                this.number('wordWrapWidth', 'Wrap Width'),
+                this.number('lineHeight', 'Line Height'),
+
+                m('h4', 'Advanced'),
+                this.select('lineJoin', 'Line Join', [
+                    'miter',
+                    'round',
+                    'bevel'
+                ]),
+                this.number('miterLimit', 'Miter Limit'),
+
+                m('h4', 'Texture Options'),
+                this.number('padding', 'Padding'),
                 this.checkbox('trim', 'Trim'),
-                m('button.btn.btn-warning.btn-block', {
+                m('button.btn.btn-danger.btn-block', {
                     onclick: reset
                 }, 'Reset')
             ]),
-            m('div.renderer', [
-                m('canvas#renderer')
+            m('h3', [
+                m('span.glyphicon.glyphicon-eye-open'),
+                m('span', 'Preview')
+            ]),
+            m('div.renderer#renderer'),
+            m('h3', [
+                m('span.glyphicon.glyphicon-scissors'),
+                m('span', 'Sample Code')
             ]),
             m('pre.code-display.hljs', [
                 m('code.javascript', {
@@ -159,44 +289,35 @@ class TextStyleComponent {
                     oncreate: codeColor,
                     innerHTML: this.getCode()
                 })
+            ]),
+            m('h3', [
+                m('span.glyphicon.glyphicon-book'),
+                m('span', 'Documentation')
+            ]),
+            m('ul', [
+                m('li', [
+                    m('a', {href: '//pixijs.download/release/docs/PIXI.TextStyle.html'}, 'PIXI.TextStyle')
+                ]),
+                m('li', [
+                    m('a', {href: '//pixijs.download/release/docs/PIXI.Text.html'}, 'PIXI.Text')
+                ]),
+                m('li', [
+                    m('a', {href: '//pixijs.download/release/docs/PIXI.TextMetrics.html'}, 'PIXI.TextMetrics')
+                ])
             ])
         ]);
     }
 
-    checkbox(prop, name) {
-        const attr = {
-            onchange: m.withAttr('checked', (value) => {
-                this.style[prop] = value;
-                this.app.render();
-            }),
-            checked: this.style[prop]
-        };
-
-        return m('div.row', [
-            m('label.col-sm-5', { for: prop, title: prop }, name),
-            m('div.col-sm-7', [
-                m('input.check[type=checkbox]#' + prop, attr),
-            ])
-        ]);
+    select(id, name, options) {
+        return m(StyleSelect, { parent: this, id, name, options });
     }
 
-    select(prop, name, options) {
-        const attr = {
-            oninput: m.withAttr('value', (value) => {
-                this.style[prop] = value;
-                this.app.render();
-            }),
-            value: this.style[prop]
-        };
+    number(id, name) {
+        return m(StyleNumber, { parent: this, id, name });
+    }
 
-        return m('div.row', [
-            m('label.col-sm-5', {for: prop, title: prop}, name),
-            m('div.col-sm-7', [
-                m('select.form-control.input-sm#'+prop, attr, options.map(value => {
-                    return m('option', value);
-                }))
-            ])
-        ]);
+    checkbox(id, name) {
+        return m(StyleCheckbox, { parent: this, id, name });
     }
 
     reset() {
@@ -209,23 +330,6 @@ class TextStyleComponent {
         this.text.text = this.defaultText;
         m.redraw();
         this.app.render();
-    }
-
-    number(prop, name) {
-        const attr = {
-            oninput: m.withAttr('value', (value) => {
-                this.style[prop] = parseFloat(value);
-                this.app.render();
-            }),
-            value: this.style[prop]
-        };
-
-        return m('div.row', [
-            m('label.col-sm-5', { for: prop, title: prop }, name),
-            m('div.col-sm-7', [
-                m('input.form-control.input-sm.number[type=number]#' + prop, attr),
-            ])
-        ]);
     }
 
     resize() {
@@ -249,7 +353,7 @@ class TextStyleComponent {
                 delete style[name];
             }
         }
-        let data = JSON.stringify(style, null, '  ');
+        let data = JSON.stringify(style, null, '    ');
         localStorage.setItem('style', data);
         if (data === '{}') {
             data = '';
@@ -270,15 +374,8 @@ class TextStyleComponent {
     }
 
     init() {
-        this.app = new PIXI.Application({
-            width: 400,
-            height: 100,
-            backgroundColor: 0xEEEEEE,
-            resolution: devicePixelRatio,
-            view: $('#renderer')
-        });
-        this.app.stage.addChild(this.text);
-        this.app.stop();
+
+        $('#renderer').appendChild(this.app.view);
         this.app.render();
         this.resize();
 
