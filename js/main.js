@@ -142,9 +142,9 @@ class TextStyleComponent {
                 this.number('dropShadowBlur', 'Shadow Blur'),
                 this.number('dropShadowDistance', 'Shadow Distance'),
                 this.number('wordWrapWidth', 'Wrap Width'),
-                this.checkbox('wordWrap', 'Work Wrap'),
+                this.checkbox('wordWrap', 'Word Wrap'),
                 this.checkbox('dropShadow', 'Drop Shadow'),
-                this.checkbox('breakWords', 'Break Works'),
+                this.checkbox('breakWords', 'Break Words'),
                 this.checkbox('trim', 'Trim'),
                 m('button.btn.btn-warning.btn-block', {
                     onclick: reset
