@@ -7,7 +7,6 @@
 class TextStyleEditor {
         
     constructor() {
-        this.app = null;
         this.defaults = new PIXI.TextStyle();
         this.defaultText = 'Hello World';
         this.defaultBG = '#eeeeee';
@@ -41,6 +40,7 @@ class TextStyleEditor {
             roundPixels: true,
             resolution: devicePixelRatio
         });
+        this.app.renderer.plugins.interaction.autoPreventDefault = false;
 
         for (const prop in values.style) {
             this.style[prop] = values.style[prop];

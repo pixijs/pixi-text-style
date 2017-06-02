@@ -57,6 +57,7 @@ h3 .glyphicon {
     top:0;
     height:100%;
     overflow:auto;
+    -webkit-overflow-scrolling: touch;
     background:#eee;
     padding:10px;
     font-size:12px;
@@ -116,6 +117,7 @@ h3 .glyphicon {
         top:50%;
         width:100%;
         overflow: auto;
+        -webkit-overflow-scrolling: touch;
         padding:0;
         border-top:2px dotted #999;
     }
