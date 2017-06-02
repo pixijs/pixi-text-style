@@ -10,35 +10,44 @@ class TextStyleEditor {
         this.app = null;
         this.defaults = new PIXI.TextStyle();
         this.defaultText = 'Hello World';
+        this.defaultBG = '#eeeeee';
         this.style = new PIXI.TextStyle();
-        this.text = new PIXI.Text(localStorage.text || this.defaultText, this.style);
+        this.text = new PIXI.Text('', this.style);
         this.text.anchor.set(0.5);
 
-        // Restore saved style
-        let style = null;
+        // Restore the values or get the defaults
+        let values = {
+            text: localStorage.text || this.defaultText,
+            background: localStorage.background || this.defaultBG,
+            style: JSON.parse(localStorage.style || null) || this.defaults.toJSON()
+        };
 
         // Revert from the window hash
         if (document.location.hash) {
-            style = JSON.parse(decodeURIComponent(document.location.hash.slice(1)));
-        }
-        // Revert from the localStorage save
-        else if (localStorage.getItem('style')) {
-            style = JSON.parse(localStorage.style);
-        }
-
-        if (style) {
-            for (const prop in style) {
-                this.style[prop] = style[prop];
+            try {
+                const hash = document.location.hash.slice(1);
+                values = Object.assign(values, JSON.parse(
+                    decodeURIComponent(hash)
+                ));
+            }
+            catch(err) {
+                // do nothing if theres a parse error
             }
         }
 
         this.app = new PIXI.Application({
             width: 400,
             height: 100,
-            backgroundColor: 0xEEEEEE,
             roundPixels: true,
             resolution: devicePixelRatio
         });
+
+        for (const prop in values.style) {
+            this.style[prop] = values.style[prop];
+        }
+        this.text.text = values.text;
+        this.background = values.background;
+
         this.app.stage.addChild(this.text);
         this.app.stop();
     }
@@ -164,6 +173,9 @@ class TextStyleEditor {
                 m('h4', 'Texture'),
                 this.number('padding', 'Padding'),
                 this.checkbox('trim', 'Trim'),
+
+                m('h4', 'Background'),
+                m(StyleBackgroundColor, { parent: this, id: 'backgroundColor', name: 'Color' }),
                 m('button.btn.btn-danger.btn-block', {
                     onclick: reset
                 }, 'Reset')
@@ -219,6 +231,7 @@ class TextStyleEditor {
     }
 
     reset() {
+        localStorage.removeItem('background');
         localStorage.removeItem('style');
         localStorage.removeItem('text');
         const style = this.defaults.toJSON();
@@ -226,8 +239,19 @@ class TextStyleEditor {
             this.style[prop] = style[prop];
         }
         this.text.text = this.defaultText;
+        this.background = this.defaultBG;
         m.redraw();
         this.app.render();
+    }
+
+    set background(color) {
+        localStorage.setItem('background', color);
+        this.app.renderer.backgroundColor = parseInt(color.slice(1), 16);
+    }
+
+    get background() {
+        const str = this.app.renderer.backgroundColor.toString(16);
+        return '#' + '0'.repeat(6 - str.length) + str;
     }
 
     resize() {
@@ -254,7 +278,23 @@ class TextStyleEditor {
         let data = JSON.stringify(style, null, '    ');
         let dataStore = JSON.stringify(style);
         localStorage.setItem('style', dataStore);
-        document.location.hash = '#' + encodeURIComponent(dataStore);
+
+        const hash = {};
+
+        if (dataStore !== '{}') {
+            hash.style = style;
+        }
+        if (this.defaultText !== this.text.text) {
+            hash.text = this.text.text;
+        }
+        if (this.defaultBG !== this.background) {
+            hash.background = this.background;
+        }
+
+        const encoded = Object.keys(hash).length ? 
+            encodeURIComponent(JSON.stringify(hash)) : '';
+
+        document.location.hash = `#${encoded}`;
 
         if (data === '{}') {
             data = '';
