@@ -80,6 +80,13 @@ h3 .glyphicon {
     margin-top:8px !important;
 }
 
+.color::-webkit-color-swatch-wrapper {
+    padding:0;
+}
+.color::-webkit-color-swatch {
+    border: 1px solid rgba(0,0,0,0.4);
+}
+
 ::-webkit-scrollbar {
   width: 5px;
 }
