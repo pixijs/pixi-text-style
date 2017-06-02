@@ -145,8 +145,8 @@ class TextStyleEditor {
 
                 m('h4', 'Drop Shadow'),
                 this.checkbox('dropShadow', 'Enable'),
-                this.number('dropShadowAlpha', 'Shadow Alpha'),
-                this.number('dropShadowAngle', 'Shadow Angle'),
+                this.number('dropShadowAlpha', 'Shadow Alpha', 0.1),
+                this.number('dropShadowAngle', 'Shadow Angle', 0.1),
                 this.number('dropShadowBlur', 'Shadow Blur'),
                 this.number('dropShadowDistance', 'Shadow Distance'),
                 
@@ -158,7 +158,7 @@ class TextStyleEditor {
                     'center',
                     'right'
                 ]),
-                this.number('wordWrapWidth', 'Wrap Width'),
+                this.number('wordWrapWidth', 'Wrap Width', 10),
                 this.number('lineHeight', 'Line Height'),                
 
                 m('h4', 'Texture'),
@@ -206,8 +206,8 @@ class TextStyleEditor {
         return m(StyleSelect, { parent: this, id, name, options });
     }
 
-    number(id, name) {
-        return m(StyleNumber, { parent: this, id, name });
+    number(id, name, step) {
+        return m(StyleNumber, { parent: this, id, name, step });
     }
 
     checkbox(id, name) {
