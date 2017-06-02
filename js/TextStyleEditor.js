@@ -99,7 +99,7 @@ class TextStyleEditor {
                     '"Courier New", Courier, monospace',
                     '"Lucida Console", Monaco, monospace'
                 ]),
-                this.number('fontSize', 'Font Size'),
+                this.number('fontSize', 'Font Size', 1, 1),
                 this.select('fontStyle', 'Font Style', [
                     'normal',
                     'italic',
@@ -134,13 +134,13 @@ class TextStyleEditor {
 
                 m('h4', 'Stroke'),
                 this.color('stroke', 'Color'),
-                this.number('strokeThickness', 'Stroke Thickness'),
+                this.number('strokeThickness', 'Thickness', 1, 0),
                 this.select('lineJoin', 'Line Join', [
                     'miter',
                     'round',
                     'bevel'
                 ]),
-                this.number('miterLimit', 'Miter Limit'),
+                this.number('miterLimit', 'Miter Limit', 1, 0),
 
                 m('h4', 'Layout'),
                 this.number('letterSpacing', 'Letter Spacing'),
@@ -154,7 +154,7 @@ class TextStyleEditor {
 
                 m('h4', 'Drop Shadow'),
                 this.checkbox('dropShadow', 'Enable'),
-                this.number('dropShadowAlpha', 'Shadow Alpha', 0.1),
+                this.number('dropShadowAlpha', 'Shadow Alpha', 0.1, 0, 1),
                 this.number('dropShadowAngle', 'Shadow Angle', 0.1),
                 this.number('dropShadowBlur', 'Shadow Blur'),
                 this.number('dropShadowDistance', 'Shadow Distance'),
@@ -167,8 +167,8 @@ class TextStyleEditor {
                     'center',
                     'right'
                 ]),
-                this.number('wordWrapWidth', 'Wrap Width', 10),
-                this.number('lineHeight', 'Line Height'),                
+                this.number('wordWrapWidth', 'Wrap Width', 10, 0),
+                this.number('lineHeight', 'Line Height', 1, 0),                
 
                 m('h4', 'Texture'),
                 this.number('padding', 'Padding'),
@@ -239,8 +239,8 @@ class TextStyleEditor {
         return m(StyleSelect, { parent: this, id, name, options });
     }
 
-    number(id, name, step) {
-        return m(StyleNumber, { parent: this, id, name, step });
+    number(id, name, step, min, max) {
+        return m(StyleNumber, { parent: this, id, name, step, min, max });
     }
 
     checkbox(id, name) {
