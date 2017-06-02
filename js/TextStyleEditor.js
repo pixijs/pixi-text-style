@@ -59,7 +59,7 @@ class TextStyleEditor {
         const resize = this.resize.bind(this);
         const reset = this.reset.bind(this);
 
-        return m('main', {oncreate: init}, [
+        return m('div', {oncreate: init}, [
             m('nav.controls.container-fluid', [
                 m('h3.title', 'PixiJS TextStyle'),
                 m('h4', 'Text'),
@@ -180,35 +180,56 @@ class TextStyleEditor {
                     onclick: reset
                 }, 'Reset')
             ]),
-            m('h3', [
-                m('span.glyphicon.glyphicon-eye-open'),
-                m('span', 'Preview')
-            ]),
-            m('div.renderer#renderer'),
-            m('h3', [
-                m('span.glyphicon.glyphicon-scissors'),
-                m('span', 'Sample Code')
-            ]),
-            m('pre.code-display.hljs', [
-                m('code.javascript', {
-                    onupdate: codeColor,
-                    oncreate: codeColor,
-                    innerHTML: this.getCode()
-                })
-            ]),
-            m('h3', [
-                m('span.glyphicon.glyphicon-book'),
-                m('span', 'Documentation')
-            ]),
-            m('ul', [
-                m('li', [
-                    m('a', {href: '//pixijs.download/release/docs/PIXI.TextStyle.html'}, 'PIXI.TextStyle')
+            m('main.main', [
+                m('div.col-sm-12', [
+                    m('h3', [
+                        m('span.glyphicon.glyphicon-eye-open'),
+                        m('span', 'Preview')
+                    ]),
+                    m('div.renderer#renderer')
                 ]),
-                m('li', [
-                    m('a', {href: '//pixijs.download/release/docs/PIXI.Text.html'}, 'PIXI.Text')
+                m('div.col-sm-6', [
+                    m('h3', [
+                        m('span.glyphicon.glyphicon-scissors'),
+                        m('span', 'JavaScript')
+                    ]),
+                    m('pre.code-display.hljs', [
+                        m('code.javascript', {
+                            onupdate: codeColor,
+                            oncreate: codeColor,
+                            innerHTML: this.getCode()
+                        })
+                    ])
                 ]),
-                m('li', [
-                    m('a', {href: '//pixijs.download/release/docs/PIXI.TextMetrics.html'}, 'PIXI.TextMetrics')
+                m('div.col-sm-6', [
+                    m('h3', [
+                        m('span.glyphicon.glyphicon-scissors'),
+                        m('span', 'JSON')
+                    ]),
+                    m('pre.code-display.hljs', [
+                        m('code.json', {
+                            onupdate: codeColor,
+                            oncreate: codeColor,
+                            innerHTML: this.getCode(true)
+                        })
+                    ])
+                ]),
+                m('div.col-sm-12', [
+                    m('h3', [
+                        m('span.glyphicon.glyphicon-book'),
+                        m('span', 'Documentation')
+                    ]),
+                    m('ul', [
+                        m('li', [
+                            m('a', {href: '//pixijs.download/release/docs/PIXI.TextStyle.html'}, 'PIXI.TextStyle')
+                        ]),
+                        m('li', [
+                            m('a', {href: '//pixijs.download/release/docs/PIXI.Text.html'}, 'PIXI.Text')
+                        ]),
+                        m('li', [
+                            m('a', {href: '//pixijs.download/release/docs/PIXI.TextMetrics.html'}, 'PIXI.TextMetrics')
+                        ])
+                    ])
                 ])
             ])
         ]);
@@ -268,7 +289,7 @@ class TextStyleEditor {
         hljs.highlightBlock(element.dom);
     }
 
-    getCode() {
+    getCode(jsonOnly) {
         const style = this.style.toJSON();
         for (const name in style) {
             if (style[name] === this.defaults[name]) {
@@ -276,6 +297,11 @@ class TextStyleEditor {
             }
         }
         let data = JSON.stringify(style, null, '    ');
+
+        if (jsonOnly) {
+            return data;
+        }
+
         let dataStore = JSON.stringify(style);
         localStorage.setItem('style', dataStore);
 

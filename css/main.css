@@ -2,7 +2,7 @@ body {
     background:#eee;
     margin:0;
     font-family: Arial;
-    padding: 0px 20px 20px 360px;
+    padding: 0;
 }
 
 canvas {
@@ -12,6 +12,10 @@ canvas {
 h3 .glyphicon {
     margin-right:0.5em;
     font-size:80%;
+}
+
+.main {
+    padding-left:340px;
 }
 
 .title {
@@ -40,6 +44,7 @@ h3 .glyphicon {
 
 .code-display {
     border: 0;
+    font-size:12px;
 }
 
 .code-display code {
@@ -74,18 +79,44 @@ h3 .glyphicon {
     margin-top:8px !important;
 }
 
-.controls::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 5px;
 }
 
-.controls::-webkit-scrollbar-thumb:vertical {
+::-webkit-scrollbar-thumb:vertical {
   margin: 5px;
   background-color: #999;
   -webkit-border-radius: 5px;
 }
 
-.controls::-webkit-scrollbar-button:start:decrement,
-.controls::-webkit-scrollbar-button:end:increment {
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
   height: 5px;
   display: block;
+}
+
+@media (max-width: 760px) {
+    .controls {
+        width: 260px;
+    }
+    .main {
+        padding-left: 260px;
+    }
+}
+
+@media (max-width: 480px) {
+    .controls {
+        width: 100%;
+        position:absolute;
+        height: 50%;
+    }
+    .main {
+        position:fixed;
+        height:50%;
+        top:50%;
+        width:100%;
+        overflow: auto;
+        padding:0;
+        border-top:2px dotted #999;
+    }
 }

@@ -14,8 +14,8 @@ class StyleComponent {
         const id = this.id;
         // Wrap around all elements
         return m('div.row', [
-            m('label.col-sm-5', {for: id, title: id}, this.name),
-            m('div.col-sm-7', [ this.init() ])
+            m('label.col-xs-5', {for: id, title: id}, this.name),
+            m('div.col-xs-7', [ this.init() ])
         ]);
     }
     update(value) {
