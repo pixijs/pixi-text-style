@@ -20,9 +20,7 @@ class StyleSelect extends StyleComponent {
     init() {
         return m('select.form-control.input-sm#'+this.id, {
             key: this.id,
-            oninput: m.withAttr('value', (value) => {
-                this.update(value);
-            }),
+            oninput: m.withAttr('value', this.update, this),
             value: this.parent.style[this.id]
         },
         this.options);

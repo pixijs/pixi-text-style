@@ -75,6 +75,20 @@ h3 .glyphicon {
     margin-top:5px;
 }
 
+.gradient {
+    margin-bottom:8px;
+}
+.gradient .color-group {
+    margin-bottom:5px;
+}
+.gradient .color-group .btn {
+    padding-left:4px;
+    padding-right:4px;
+}
+.gradient .color-group .glyphicon {
+    font-size: 10px;
+}
+
 .check {
     margin-right:5px !important;
     margin-top:8px !important;

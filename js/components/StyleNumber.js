@@ -18,9 +18,7 @@ class StyleNumber extends StyleComponent {
             step: this.step,
             min: this.min,
             max: this.max,
-            oninput: m.withAttr('value', (value) => {
-                this.update(value);
-            }),
+            oninput: m.withAttr('value', this.update, this),
             value: this.parent.style[this.id]
         });
     }

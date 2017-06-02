@@ -18,18 +18,29 @@ class StyleComponent {
             m('div.col-xs-7', [ this.init() ])
         ]);
     }
-    update(value) {
-        if (/^\-?\d+$/.test(value)) {
+
+    parse(value) {
+        // recursively parse arrays
+        if (Array.isArray(value)) {
+            value = value.map(v => this.parse(v));
+        }
+        // Handle integers as strings
+        else if (/^\-?\d+$/.test(value)) {
             value = parseInt(value);
         }
+        // Handle floats as strings
         else if(/^\-?\d*\.\d+$/.test(value)) {
             value = parseFloat(value);
         }
-        this.parent.style[this.id] = value;
+        return value;
+    }
+
+    update(value) {
+        this.parent.style[this.id] = this.parse(value);
         this.parent.app.render();
     }
 
     init() {
-        // override
+        throw 'override init';
     }
 }

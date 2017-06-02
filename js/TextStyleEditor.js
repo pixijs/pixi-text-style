@@ -126,7 +126,7 @@ class TextStyleEditor {
                 ]),
 
                 m('h4', 'Fill'),
-                this.color('fill', 'Color'),
+                this.gradient('fill', 'Color'),
                 this.select('fillGradientType', 'Gradient Type', [
                     [0, 'linear vertical'],
                     [1, 'linear horizontal']
@@ -249,6 +249,10 @@ class TextStyleEditor {
 
     color(id, name) {
         return m(StyleColor, { parent: this, id, name });
+    }
+
+    gradient(id, name) {
+        return m(StyleColorGradient, { parent: this, id, name });
     }
 
     reset() {

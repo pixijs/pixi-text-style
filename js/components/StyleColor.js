@@ -6,7 +6,9 @@
  * @extends StyleComponent
  */
 class StyleColor extends StyleComponent {
-    init() {
+
+    constructor(vnode) {
+        super(vnode);
 
         // Map of color names
         this.colorMap = {
@@ -33,8 +35,10 @@ class StyleColor extends StyleComponent {
         Object.keys(this.colorMap).forEach(value => {
             this.stringMap[this.colorMap[value]] = value;
         });
+    }
 
-        return m('input.form-control.input-sm.color[type=color]#'+this.id, {
+    init() {
+        return m('input.form-control.input-sm.color.color-group[type=color]#'+this.id, {
             key: this.id,
             oninput: m.withAttr('value', (value) => {
                 this.update(this.hexToString(value));
