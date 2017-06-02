@@ -129,7 +129,7 @@ class TextStyleEditor {
                 this.color('fill', 'Color'),
                 this.select('fillGradientType', 'Gradient Type', [
                     [0, 'linear vertical'],
-                    [1, 'linear horiztonal']
+                    [1, 'linear horizontal']
                 ]),
 
                 m('h4', 'Stroke'),
