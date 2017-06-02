@@ -252,8 +252,9 @@ class TextStyleEditor {
             }
         }
         let data = JSON.stringify(style, null, '    ');
-        localStorage.setItem('style', data);
-        document.location.hash = '#' + encodeURIComponent(data);
+        let dataStore = JSON.stringify(style);
+        localStorage.setItem('style', dataStore);
+        document.location.hash = '#' + encodeURIComponent(dataStore);
 
         if (data === '{}') {
             data = '';
