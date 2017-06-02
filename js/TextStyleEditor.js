@@ -15,8 +15,18 @@ class TextStyleEditor {
         this.text.anchor.set(0.5);
 
         // Restore saved style
-        if (localStorage.getItem('style')) {
-            const style = JSON.parse(localStorage.style);
+        let style = null;
+
+        // Revert from the window hash
+        if (document.location.hash) {
+            style = JSON.parse(decodeURIComponent(document.location.hash.slice(1)));
+        }
+        // Revert from the localStorage save
+        else if (localStorage.getItem('style')) {
+            style = JSON.parse(localStorage.style);
+        }
+
+        if (style) {
             for (const prop in style) {
                 this.style[prop] = style[prop];
             }
@@ -243,6 +253,8 @@ class TextStyleEditor {
         }
         let data = JSON.stringify(style, null, '    ');
         localStorage.setItem('style', data);
+        document.location.hash = '#' + encodeURIComponent(data);
+
         if (data === '{}') {
             data = '';
         }
