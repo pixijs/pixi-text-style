@@ -154,10 +154,11 @@ class TextStyleEditor {
 
                 m('h4', 'Drop Shadow'),
                 this.checkbox('dropShadow', 'Enable'),
-                this.number('dropShadowAlpha', 'Shadow Alpha', 0.1, 0, 1),
-                this.number('dropShadowAngle', 'Shadow Angle', 0.1),
-                this.number('dropShadowBlur', 'Shadow Blur'),
-                this.number('dropShadowDistance', 'Shadow Distance'),
+                this.color('dropShadowColor', 'Color'),
+                this.number('dropShadowAlpha', 'Alpha', 0.1, 0, 1),
+                this.number('dropShadowAngle', 'Angle', 0.1),
+                this.number('dropShadowBlur', 'Blur'),
+                this.number('dropShadowDistance', 'Distance'),
                 
                 m('h4', 'Multiline'),
                 this.checkbox('wordWrap', 'Enable'),
