@@ -8,13 +8,16 @@ class TextStyleEditor {
         
     constructor() {
         this.defaults = new PIXI.TextStyle();
-        // The default dropShadowColor is "#000000",
-        // this makes it consistent with fill, strokeFill, etc
-        this.defaults.dropShadowColor = 'black';
 
         this.defaultText = 'Hello World';
         this.defaultBG = '#eeeeee';
         this.style = new PIXI.TextStyle();
+        
+        // The default dropShadowColor is "#000000",
+        // this makes it consistent with fill, strokeFill, etc
+        this.defaults.dropShadowColor = 'black';
+        this.style.dropShadowColor = 'black';
+
         this.text = new PIXI.Text('', this.style);
         this.text.anchor.set(0.5);
 
