@@ -41,6 +41,7 @@ class TextStyleEditor {
             }
         }
 
+        PIXI.utils.skipHello();
         this.app = new PIXI.Application({
             width: 400,
             height: 100,
@@ -196,7 +197,8 @@ class TextStyleEditor {
                 m('div.col-sm-12', [
                     m('h3', [
                         m('span.glyphicon.glyphicon-eye-open'),
-                        m('span', 'Preview')
+                        m('span', 'Preview'),
+                        m('small', ` PixiJS v${PIXI.VERSION}`)
                     ]),
                     m('div.renderer#renderer')
                 ]),
@@ -340,7 +342,7 @@ class TextStyleEditor {
         const encoded = Object.keys(hash).length ? 
             encodeURIComponent(JSON.stringify(hash)) : '';
 
-        document.location.hash = `#${encoded}`;
+        history.replaceState(null, null, `#${encoded}`);
 
         if (data === '{}') {
             data = '';
