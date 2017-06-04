@@ -124,6 +124,10 @@ h3 .glyphicon {
     .main {
         padding-left: 260px;
     }
+    .title {
+        font-size:160%;
+        height: 30px;
+    }
 }
 
 @media (max-width: 480px) {

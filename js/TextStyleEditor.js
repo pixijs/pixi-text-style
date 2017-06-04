@@ -68,7 +68,14 @@ class TextStyleEditor {
 
         return m('div', {oncreate: init}, [
             m('nav.controls.container-fluid', [
-                m('h3.title', 'PixiJS TextStyle'),
+                m('h3.title', ['PixiJS TextStyle',
+                    m('button.btn.btn-primary.btn-sm.pull-right', {
+                        onclick: reset
+                    }, [
+                        m('span.glyphicon.glyphicon-trash'),
+                        ' Reset'
+                    ])
+                ]),
                 m('h4', 'Text'),
                 m('div.row', [
                     m('div.col-sm-12', [
@@ -183,10 +190,7 @@ class TextStyleEditor {
                 this.checkbox('trim', 'Trim'),
 
                 m('h4', 'Background'),
-                m(StyleBackgroundColor, { parent: this, id: 'backgroundColor', name: 'Color' }),
-                m('button.btn.btn-danger.btn-block', {
-                    onclick: reset
-                }, 'Reset')
+                m(StyleBackgroundColor, { parent: this, id: 'backgroundColor', name: 'Color' })
             ]),
             m('main.main', [
                 m('div.col-sm-12', [
@@ -264,6 +268,10 @@ class TextStyleEditor {
     }
 
     reset() {
+        if (!confirm('Are you sure you want to remove all your saved styles?')) {
+            return;
+        }
+
         localStorage.removeItem('background');
         localStorage.removeItem('style');
         localStorage.removeItem('text');
