@@ -94,6 +94,10 @@ h3 .glyphicon {
     margin-top:8px !important;
 }
 
+.color {
+    padding:0 !important;
+}
+
 .color::-webkit-color-swatch-wrapper {
     padding:0;
 }
