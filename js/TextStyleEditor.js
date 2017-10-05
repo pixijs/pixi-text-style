@@ -10,7 +10,7 @@ class TextStyleEditor {
         this.defaults = new PIXI.TextStyle();
 
         this.defaultText = 'Hello World';
-        this.defaultBG = '#eeeeee';
+        this.defaultBG = '#ffffff';
         this.style = new PIXI.TextStyle();
         
         // The default dropShadowColor is "#000000",
@@ -68,130 +68,132 @@ class TextStyleEditor {
         const reset = this.reset.bind(this);
 
         return m('div', {oncreate: init}, [
-            m('nav.controls.container-fluid', [
-                m('h3.title', ['PixiJS TextStyle',
-                    m('button.btn.btn-primary.btn-sm.pull-right', {
-                        onclick: reset
-                    }, [
-                        m('span.glyphicon.glyphicon-trash'),
-                        ' Reset'
-                    ])
-                ]),
-                m('h4', 'Text'),
-                m('div.row', [
-                    m('div.col-sm-12', [
-                        m('textarea.form-control#input', {
-                            autofocus: true,
-                            oninput: m.withAttr('value', onText),
-                            value: this.text.text
-                        })
-                    ])
-                ]),
-                
-                m('h4', 'Font'),
-                this.select('fontFamily', 'Font Family', [
-                    'Arial',
-                    'Arial Black',
-                    'Comic Sans MS',
-                    'Courier New',
-                    'Georgia',
-                    'Helvetica',
-                    'Impact',
-                    'Tahoma',
-                    'Times New Roman',
-                    'Verdana',
-                    'Georgia, serif',
-                    '"Palatino Linotype", "Book Antiqua", Palatino, serif',
-                    '"Times New Roman", Times, serif',
-                    'Arial, Helvetica, sans-serif',
-                    '"Arial Black", Gadget, sans-serif',
-                    '"Comic Sans MS", cursive, sans-serif',
-                    'Impact, Charcoal, sans-serif',
-                    '"Lucida Sans Unicode", "Lucida Grande", sans-serif',
-                    'Tahoma, Geneva, sans-serif',
-                    '"Trebuchet MS", Helvetica, sans-serif',
-                    'Verdana, Geneva, sans-serif',
-                    '"Courier New", Courier, monospace',
-                    '"Lucida Console", Monaco, monospace'
-                ]),
-                this.number('fontSize', 'Font Size', 1, 1),
-                this.select('fontStyle', 'Font Style', [
-                    'normal',
-                    'italic',
-                    'oblique'
-                ]),
-                this.select('fontVariant', 'Font Variant', [
-                    'normal',
-                    'small-caps'
-                ]),
-                this.select('fontWeight', 'Font Weight', [
-                    'normal',
-                    'bold',
-                    'bolder',
-                    'lighter',
-                    '100',
-                    '200',
-                    '300',
-                    '400',
-                    '500',
-                    '600',
-                    '700',
-                    '800',
-                    '900'
-                ]),
+            m('nav.controls', [
+                m('div.container-fluid', [
+                    m('h3.title', ['PixiJS TextStyle',
+                        m('button.btn.btn-primary.btn-sm.pull-right', {
+                            onclick: reset
+                        }, [
+                            m('span.glyphicon.glyphicon-refresh'),
+                            ' Reset'
+                        ])
+                    ]),
+                    m('h4', 'Text'),
+                    m('div.row', [
+                        m('div.col-sm-12', [
+                            m('textarea.form-control#input', {
+                                autofocus: true,
+                                oninput: m.withAttr('value', onText),
+                                value: this.text.text
+                            })
+                        ])
+                    ]),
+                    
+                    m('h4', 'Font'),
+                    this.select('fontFamily', 'Font Family', [
+                        'Arial',
+                        'Arial Black',
+                        'Comic Sans MS',
+                        'Courier New',
+                        'Georgia',
+                        'Helvetica',
+                        'Impact',
+                        'Tahoma',
+                        'Times New Roman',
+                        'Verdana',
+                        'Georgia, serif',
+                        '"Palatino Linotype", "Book Antiqua", Palatino, serif',
+                        '"Times New Roman", Times, serif',
+                        'Arial, Helvetica, sans-serif',
+                        '"Arial Black", Gadget, sans-serif',
+                        '"Comic Sans MS", cursive, sans-serif',
+                        'Impact, Charcoal, sans-serif',
+                        '"Lucida Sans Unicode", "Lucida Grande", sans-serif',
+                        'Tahoma, Geneva, sans-serif',
+                        '"Trebuchet MS", Helvetica, sans-serif',
+                        'Verdana, Geneva, sans-serif',
+                        '"Courier New", Courier, monospace',
+                        '"Lucida Console", Monaco, monospace'
+                    ]),
+                    this.number('fontSize', 'Font Size', 1, 1),
+                    this.select('fontStyle', 'Font Style', [
+                        'normal',
+                        'italic',
+                        'oblique'
+                    ]),
+                    this.select('fontVariant', 'Font Variant', [
+                        'normal',
+                        'small-caps'
+                    ]),
+                    this.select('fontWeight', 'Font Weight', [
+                        'normal',
+                        'bold',
+                        'bolder',
+                        'lighter',
+                        '100',
+                        '200',
+                        '300',
+                        '400',
+                        '500',
+                        '600',
+                        '700',
+                        '800',
+                        '900'
+                    ]),
 
-                m('h4', 'Fill'),
-                this.gradient('fill', 'Color'),
-                this.select('fillGradientType', 'Gradient Type', [
-                    [0, 'linear vertical'],
-                    [1, 'linear horizontal']
-                ]),
+                    m('h4', 'Fill'),
+                    this.gradient('fill', 'Color'),
+                    this.select('fillGradientType', 'Gradient Type', [
+                        [0, 'linear vertical'],
+                        [1, 'linear horizontal']
+                    ]),
 
-                m('h4', 'Stroke'),
-                this.color('stroke', 'Color'),
-                this.number('strokeThickness', 'Thickness', 1, 0),
-                this.select('lineJoin', 'Line Join', [
-                    'miter',
-                    'round',
-                    'bevel'
-                ]),
-                this.number('miterLimit', 'Miter Limit', 1, 0),
+                    m('h4', 'Stroke'),
+                    this.color('stroke', 'Color'),
+                    this.number('strokeThickness', 'Thickness', 1, 0),
+                    this.select('lineJoin', 'Line Join', [
+                        'miter',
+                        'round',
+                        'bevel'
+                    ]),
+                    this.number('miterLimit', 'Miter Limit', 1, 0),
 
-                m('h4', 'Layout'),
-                this.number('letterSpacing', 'Letter Spacing'),
-                this.select('textBaseline', 'Text Baseline', [
-                    'alphabetic',
-                    'bottom',
-                    'middle',
-                    'top',
-                    'hanging'
-                ]),
+                    m('h4', 'Layout'),
+                    this.number('letterSpacing', 'Letter Spacing'),
+                    this.select('textBaseline', 'Text Baseline', [
+                        'alphabetic',
+                        'bottom',
+                        'middle',
+                        'top',
+                        'hanging'
+                    ]),
 
-                m('h4', 'Drop Shadow'),
-                this.checkbox('dropShadow', 'Enable'),
-                this.color('dropShadowColor', 'Color'),
-                this.number('dropShadowAlpha', 'Alpha', 0.1, 0, 1),
-                this.number('dropShadowAngle', 'Angle', 0.1),
-                this.number('dropShadowBlur', 'Blur'),
-                this.number('dropShadowDistance', 'Distance'),
-                
-                m('h4', 'Multiline'),
-                this.checkbox('wordWrap', 'Enable'),
-                this.checkbox('breakWords', 'Break Words'),
-                this.select('align', 'Align', [
-                    'left',
-                    'center',
-                    'right'
-                ]),
-                this.number('wordWrapWidth', 'Wrap Width', 10, 0),
-                this.number('lineHeight', 'Line Height', 1, 0),                
+                    m('h4', 'Drop Shadow'),
+                    this.checkbox('dropShadow', 'Enable'),
+                    this.color('dropShadowColor', 'Color'),
+                    this.number('dropShadowAlpha', 'Alpha', 0.1, 0, 1),
+                    this.number('dropShadowAngle', 'Angle', 0.1),
+                    this.number('dropShadowBlur', 'Blur'),
+                    this.number('dropShadowDistance', 'Distance'),
+                    
+                    m('h4', 'Multiline'),
+                    this.checkbox('wordWrap', 'Enable'),
+                    this.checkbox('breakWords', 'Break Words'),
+                    this.select('align', 'Align', [
+                        'left',
+                        'center',
+                        'right'
+                    ]),
+                    this.number('wordWrapWidth', 'Wrap Width', 10, 0),
+                    this.number('lineHeight', 'Line Height', 1, 0),                
 
-                m('h4', 'Texture'),
-                this.number('padding', 'Padding'),
-                this.checkbox('trim', 'Trim'),
+                    m('h4', 'Texture'),
+                    this.number('padding', 'Padding'),
+                    this.checkbox('trim', 'Trim'),
 
-                m('h4', 'Background'),
-                m(StyleBackgroundColor, { parent: this, id: 'backgroundColor', name: 'Color' })
+                    m('h4', 'Background'),
+                    m(StyleBackgroundColor, { parent: this, id: 'backgroundColor', name: 'Color' })
+                ])
             ]),
             m('main.main', [
                 m('div.col-sm-12', [

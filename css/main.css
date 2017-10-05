@@ -1,7 +1,7 @@
 body {
-    background:#eee;
+    background:#ecedf1;
     margin:0;
-    font-family: Arial;
+    font-family: "Libre Franklin", sans-serif;
     padding: 0;
 }
 
@@ -14,25 +14,30 @@ h3 .glyphicon {
     font-size:80%;
 }
 
+h3 {
+    font-weight:700;
+}
+
 .main {
     padding-left:340px;
 }
 
 .title {
-    margin-top:0;
+    font-size: 22px;
+    color: #fff;
+    font-weight:700;
 }
 
 .controls h4 {
-    border-top: 1px solid #ccc;
-    padding: 5px 10px;
-    background: #ddd;
-    color: #333 !important;
-    font-size: 14px !important;
+    border-bottom: 1px solid #3d495a;
+    padding: 5px 0;
+    color: #e91e63;
+    font-size: 16px;
+    font-weight:700;
 }
 
 .renderer {
     height:200px;
-    border:1px dotted #ccc;
     border-radius: 4px;
     margin-bottom:10px;
 }
@@ -58,13 +63,27 @@ h3 .glyphicon {
     height:100%;
     overflow:auto;
     -webkit-overflow-scrolling: touch;
-    background:#eee;
-    padding:10px;
+    background:#272d37;
+    color:#cfd4db;
     font-size:12px;
     width:340px;
     -webkit-user-select:none;
     user-select:none;
     box-sizing: border-box;
+}
+
+.hljs {
+    background-color: #282e38;
+}
+
+.controls::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
+}
+
+.controls::-webkit-scrollbar-thumb {
+    background-color: #647086;
+    border-radius: 4px;
 }
 
 .controls .row {
@@ -73,6 +92,15 @@ h3 .glyphicon {
 
 .controls label {
     margin-top:5px;
+    font-weight:normal;
+}
+
+.controls input,
+.controls textarea,
+.controls select {
+    background-color: #14171d;
+    color: #fff;
+    border-color: #3d495a;
 }
 
 .gradient {
@@ -103,22 +131,6 @@ h3 .glyphicon {
 }
 .color::-webkit-color-swatch {
     border: 1px solid rgba(0,0,0,0.4);
-}
-
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-::-webkit-scrollbar-thumb:vertical {
-  margin: 5px;
-  background-color: #999;
-  -webkit-border-radius: 5px;
-}
-
-::-webkit-scrollbar-button:start:decrement,
-::-webkit-scrollbar-button:end:increment {
-  height: 5px;
-  display: block;
 }
 
 @media (max-width: 760px) {
