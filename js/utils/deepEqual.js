@@ -5,7 +5,7 @@ function deepEqual(a, b) {
         return true;
     }
 
-    if (typeof a !== typeof b || a == null || typeof a != "object" || b == null || typeof b != "object") {
+    if (typeof a !== typeof b || a == null || b === null || typeof a !== "object" || typeof b !== "object") {
         return false;
     }
 
@@ -23,5 +23,5 @@ function deepEqual(a, b) {
         }
     }
 
-    return propsInA == propsInB;
+    return propsInA === propsInB;
 }
