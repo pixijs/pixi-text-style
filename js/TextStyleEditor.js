@@ -25,7 +25,7 @@ class TextStyleEditor {
         let values = {
             text: localStorage.text || this.defaultText,
             background: localStorage.background || this.defaultBG,
-            style: JSON.parse(localStorage.style || null) || this.style.toJSON()
+            style: JSON.parse(localStorage.style || null) || this.defaults.toJSON()
         };
 
         // Revert from the window hash
@@ -50,9 +50,8 @@ class TextStyleEditor {
         });
         this.app.renderer.plugins.interaction.autoPreventDefault = false;
 
-        for (const prop in values.style) {
-            this.style[prop] = values.style[prop];
-        }
+        this.copyPropertiesByValue(values.style, this.style);
+
         this.text.text = values.text;
         this.background = values.background;
 
@@ -285,9 +284,8 @@ class TextStyleEditor {
         localStorage.removeItem('style');
         localStorage.removeItem('text');
         const style = this.defaults.toJSON();
-        for (const prop in style) {
-            this.style[prop] = style[prop];
-        }
+        this.copyPropertiesByValue(style, this.style);
+
         this.text.text = this.defaultText;
         this.background = this.defaultBG;
         m.redraw();
@@ -321,7 +319,7 @@ class TextStyleEditor {
     getCode(jsonOnly) {
         const style = this.style.toJSON();
         for (const name in style) {
-            if (style[name] === this.defaults[name]) {
+            if (this.deepEqual(style[name], this.defaults[name])) {
                 delete style[name];
             }
         }
@@ -351,10 +349,9 @@ class TextStyleEditor {
 
         history.replaceState(null, null, `#${encoded}`);
 
-        if (data === '{}') {
+        if (data === '{}' || data === '[]') {
             data = '';
-        }
-        else {
+        } else {
             data = data.replace(/\"([^\"]+)\"\:/g, '$1:')
                 .replace(/\"/g, "'")
                 .replace(/\\'/g, '"');
@@ -374,12 +371,49 @@ class TextStyleEditor {
     }
 
     init() {
-
         document.getElementById('renderer').appendChild(this.app.view);
         this.app.render();
         this.resize();
 
         // Listen for resize events
         window.addEventListener('resize', this.resize.bind(this), false);
+    }
+
+    copyPropertiesByValue(source, target) {
+        for (const prop in source) {
+            if (Array.isArray(source[prop])) {
+                target[prop] = source[prop].slice();
+            } else if (source[prop] && typeof source[prop] === 'object') {
+                Object.assign(target[prop], source[prop]);
+            } else {
+                target[prop] = source[prop];
+            }
+        }
+    }
+
+    deepEqual(a, b) {
+        if (a === b) {
+            return true;
+        }
+
+        if (typeof a !== typeof b || a == null || typeof a != "object" || b == null || typeof b != "object") {
+            return false;
+        }
+
+        let propsInA = 0;
+        let propsInB = 0;
+
+        for (const prop in a) {
+            ++propsInA;
+        }
+
+        for (const prop in b) {
+            ++propsInB;
+            if (!(prop in a) || !this.deepEqual(a[prop], b[prop])) {
+                return false;
+            }
+        }
+
+        return propsInA == propsInB;
     }
 }

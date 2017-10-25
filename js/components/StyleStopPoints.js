@@ -17,8 +17,7 @@ class StyleStopPoints extends StyleComponent {
         let contents;
         if (!Array.isArray(values)) {
             contents = [];
-        }
-        else {
+        } else {
             contents = values.map((value, i) => {
 
                 let buttons = [

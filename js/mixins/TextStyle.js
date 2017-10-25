@@ -10,7 +10,14 @@ PIXI.TextStyle.prototype.toJSON = function() {
     for(const n in this) {
         if (n.indexOf('_') === 0) {
             const field = n.slice(1);
-            result[field] = this[field];
+
+            if (Array.isArray(this[field])) {
+                result[field] = this[field].slice();
+            } else if (this[field] && typeof this[field] === 'object') {
+                Object.assign(result[field], this[field]);
+            } else {
+                result[field] = this[field];
+            }
         }
     }
     return result;
