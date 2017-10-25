@@ -5,14 +5,14 @@
  * @class TextStyleEditor
  */
 class TextStyleEditor {
-        
+
     constructor() {
         this.defaults = new PIXI.TextStyle();
 
         this.defaultText = 'Hello World';
         this.defaultBG = '#ffffff';
         this.style = new PIXI.TextStyle();
-        
+
         // The default dropShadowColor is "#000000",
         // this makes it consistent with fill, strokeFill, etc
         this.defaults.dropShadowColor = 'black';
@@ -25,7 +25,7 @@ class TextStyleEditor {
         let values = {
             text: localStorage.text || this.defaultText,
             background: localStorage.background || this.defaultBG,
-            style: JSON.parse(localStorage.style || null) || this.defaults.toJSON()
+            style: JSON.parse(localStorage.style || null) || this.style.toJSON()
         };
 
         // Revert from the window hash
@@ -88,7 +88,7 @@ class TextStyleEditor {
                             })
                         ])
                     ]),
-                    
+
                     m('h4', 'Font'),
                     this.select('fontFamily', 'Font Family', [
                         'Arial',
@@ -147,6 +147,7 @@ class TextStyleEditor {
                         [0, 'linear vertical'],
                         [1, 'linear horizontal']
                     ]),
+                    this.stopPoints('fillGradientStops', 'Fill Gradient Stops', 0.1, 0, 1),
 
                     m('h4', 'Stroke'),
                     this.color('stroke', 'Color'),
@@ -175,7 +176,7 @@ class TextStyleEditor {
                     this.number('dropShadowAngle', 'Angle', 0.1),
                     this.number('dropShadowBlur', 'Blur'),
                     this.number('dropShadowDistance', 'Distance'),
-                    
+
                     m('h4', 'Multiline'),
                     this.checkbox('wordWrap', 'Enable'),
                     this.checkbox('breakWords', 'Break Words'),
@@ -185,7 +186,7 @@ class TextStyleEditor {
                         'right'
                     ]),
                     this.number('wordWrapWidth', 'Wrap Width', 10, 0),
-                    this.number('lineHeight', 'Line Height', 1, 0),                
+                    this.number('lineHeight', 'Line Height', 1, 0),
 
                     m('h4', 'Texture'),
                     this.number('padding', 'Padding'),
@@ -257,6 +258,10 @@ class TextStyleEditor {
 
     number(id, name, step, min, max) {
         return m(StyleNumber, { parent: this, id, name, step, min, max });
+    }
+
+    stopPoints(id, name, step, min, max) {
+        return m(StyleStopPoints, { parent: this, id, name, step, min, max });
     }
 
     checkbox(id, name) {
@@ -341,7 +346,7 @@ class TextStyleEditor {
             hash.background = this.background;
         }
 
-        const encoded = Object.keys(hash).length ? 
+        const encoded = Object.keys(hash).length ?
             encodeURIComponent(JSON.stringify(hash)) : '';
 
         history.replaceState(null, null, `#${encoded}`);
