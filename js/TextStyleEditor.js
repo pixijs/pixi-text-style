@@ -21,6 +21,9 @@ class TextStyleEditor {
         this.text = new PIXI.Text('', this.style);
         this.text.anchor.set(0.5);
 
+        // Spacing type
+        this.indent = parseInt(localStorage.indent) || TextStyleEditor.INDENT.SPACE_4;
+
         // Restore the values or get the defaults
         let values = {
             text: localStorage.text || this.defaultText,
@@ -65,6 +68,7 @@ class TextStyleEditor {
         const codeColor = this.codeColor.bind(this);
         const resize = this.resize.bind(this);
         const reset = this.reset.bind(this);
+        const onFormat = this.onFormat.bind(this);
 
         return m('div', {oncreate: init}, [
             m('nav.controls', [
@@ -232,6 +236,33 @@ class TextStyleEditor {
                 ]),
                 m('div.col-sm-12', [
                     m('h3', [
+                        m('span.glyphicon.glyphicon-cog'),
+                        m('span', 'Options')
+                    ]),
+                    m('div.well', [
+                        m('div.row.config', [
+                            m('label.col-md-2.col-sm-3', [
+                                m('span.glyphicon.glyphicon-indent-left'),
+                                m('span.name', 'Indent')
+                            ]),
+                            m('div.col-md-10.col-sm-9', [
+                                m('select.form-control.input-sm', {
+                                    onchange: onFormat,
+                                    value: this.indent
+                                }, [
+                                    m('option', {value: TextStyleEditor.INDENT.SPACE_4}, '4 Spaces'),
+                                    m('option', {value: TextStyleEditor.INDENT.SPACE_3}, '3 Spaces'),
+                                    m('option', {value: TextStyleEditor.INDENT.SPACE_2}, '2 Spaces'),
+                                    m('option', {value: TextStyleEditor.INDENT.TAB}, 'Tab'),
+                                    m('option', {value: TextStyleEditor.INDENT.NONE}, 'No indent'),
+                                    m('option', {value: TextStyleEditor.INDENT.NONE_PRETTY}, 'No indent (with spaces)')
+                                ])
+                            ])
+                        ])
+                    ])
+                ]),
+                m('div.col-sm-12', [
+                    m('h3', [
                         m('span.glyphicon.glyphicon-book'),
                         m('span', 'Documentation')
                     ]),
@@ -273,6 +304,12 @@ class TextStyleEditor {
 
     gradient(id, name) {
         return m(StyleColorGradient, { parent: this, id, name });
+    }
+
+    onFormat(element) {
+        this.indent = parseInt(element.target.value);
+        localStorage.indent = this.indent;
+        m.redraw();
     }
 
     reset() {
@@ -322,9 +359,25 @@ class TextStyleEditor {
                 delete style[name];
             }
         }
-        let data = JSON.stringify(style, null, '    ');
+
+        let indent;
+        let pretty = false;
+
+        switch(this.indent) {
+            case TextStyleEditor.INDENT.SPACE_4: indent = '    '; break;
+            case TextStyleEditor.INDENT.SPACE_3: indent = '   '; break;
+            case TextStyleEditor.INDENT.SPACE_2: indent = '  '; break;
+            case TextStyleEditor.INDENT.TAB: indent = '\t'; break;
+            case TextStyleEditor.INDENT.NONE_PRETTY: pretty = true; break;
+            default: indent = ''; break;
+        }
+
+        let data = JSON.stringify(style, null, indent);
 
         if (jsonOnly) {
+            if (pretty) {
+                return this.prettify(data);
+            }
             return data;
         }
 
@@ -354,6 +407,10 @@ class TextStyleEditor {
             data = data.replace(/\"([^\"]+)\"\:/g, '$1:')
                 .replace(/\"/g, "'")
                 .replace(/\\'/g, '"');
+
+            if (pretty) {
+                data = this.prettify(data);
+        }
         }
 
         const text = this.text.text.replace(/\n/g, '\\n')
@@ -361,6 +418,10 @@ class TextStyleEditor {
 
         return `const style = new PIXI.TextStyle(${data});\n`
             + `const text = new PIXI.Text('${text}', style);`;
+    }
+
+    prettify(data) {
+        return data.replace(/([{:,])/g, '$1 ').replace(/}$/, ' }');
     }
 
     onText(text) {
@@ -378,3 +439,12 @@ class TextStyleEditor {
         window.addEventListener('resize', this.resize.bind(this), false);
     }
 }
+
+TextStyleEditor.INDENT = {
+    NONE: 1,
+    NONE_PRETTY: 2,
+    TAB: 3,
+    SPACE_4: 4,
+    SPACE_3: 5,
+    SPACE_2: 6
+};
