@@ -18,11 +18,6 @@ class TextStyleEditor {
         this.defaults.dropShadowColor = 'black';
         this.style.dropShadowColor = 'black';
 
-        // Temporary fix since the array is copied by reference in PIXI.TextStyle
-        // To be removed when that is fixed within PIXI itself
-        this.style.fillGradientStops = [0];
-        this.style.fillGradientStops = [];
-
         this.text = new PIXI.Text('', this.style);
         this.text.anchor.set(0.5);
 
