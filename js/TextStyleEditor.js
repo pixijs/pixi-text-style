@@ -5,14 +5,14 @@
  * @class TextStyleEditor
  */
 class TextStyleEditor {
-        
+
     constructor() {
         this.defaults = new PIXI.TextStyle();
 
         this.defaultText = 'Hello World';
         this.defaultBG = '#ffffff';
         this.style = new PIXI.TextStyle();
-        
+
         // The default dropShadowColor is "#000000",
         // this makes it consistent with fill, strokeFill, etc
         this.defaults.dropShadowColor = 'black';
@@ -53,9 +53,8 @@ class TextStyleEditor {
         });
         this.app.renderer.plugins.interaction.autoPreventDefault = false;
 
-        for (const prop in values.style) {
-            this.style[prop] = values.style[prop];
-        }
+        deepCopy(this.style, values.style);
+
         this.text.text = values.text;
         this.background = values.background;
 
@@ -92,7 +91,7 @@ class TextStyleEditor {
                             })
                         ])
                     ]),
-                    
+
                     m('h4', 'Font'),
                     this.select('fontFamily', 'Font Family', [
                         'Arial',
@@ -151,6 +150,7 @@ class TextStyleEditor {
                         [0, 'linear vertical'],
                         [1, 'linear horizontal']
                     ]),
+                    this.stopPoints('fillGradientStops', 'Fill Gradient Stops', 0.1, 0, 1),
 
                     m('h4', 'Stroke'),
                     this.color('stroke', 'Color'),
@@ -179,7 +179,7 @@ class TextStyleEditor {
                     this.number('dropShadowAngle', 'Angle', 0.1),
                     this.number('dropShadowBlur', 'Blur'),
                     this.number('dropShadowDistance', 'Distance'),
-                    
+
                     m('h4', 'Multiline'),
                     this.checkbox('wordWrap', 'Enable'),
                     this.checkbox('breakWords', 'Break Words'),
@@ -189,7 +189,7 @@ class TextStyleEditor {
                         'right'
                     ]),
                     this.number('wordWrapWidth', 'Wrap Width', 10, 0),
-                    this.number('lineHeight', 'Line Height', 1, 0),                
+                    this.number('lineHeight', 'Line Height', 1, 0),
 
                     m('h4', 'Texture'),
                     this.number('padding', 'Padding'),
@@ -290,6 +290,10 @@ class TextStyleEditor {
         return m(StyleNumber, { parent: this, id, name, step, min, max });
     }
 
+    stopPoints(id, name, step, min, max) {
+        return m(StyleStopPoints, { parent: this, id, name, step, min, max });
+    }
+
     checkbox(id, name) {
         return m(StyleCheckbox, { parent: this, id, name });
     }
@@ -316,10 +320,8 @@ class TextStyleEditor {
         localStorage.removeItem('background');
         localStorage.removeItem('style');
         localStorage.removeItem('text');
-        const style = this.defaults.toJSON();
-        for (const prop in style) {
-            this.style[prop] = style[prop];
-        }
+        deepCopy(this.style, this.defaults.toJSON());
+
         this.text.text = this.defaultText;
         this.background = this.defaultBG;
         m.redraw();
@@ -353,7 +355,7 @@ class TextStyleEditor {
     getCode(jsonOnly) {
         const style = this.style.toJSON();
         for (const name in style) {
-            if (style[name] === this.defaults[name]) {
+            if (deepEqual(style[name], this.defaults[name])) {
                 delete style[name];
             }
         }
@@ -394,15 +396,14 @@ class TextStyleEditor {
             hash.background = this.background;
         }
 
-        const encoded = Object.keys(hash).length ? 
+        const encoded = Object.keys(hash).length ?
             encodeURIComponent(JSON.stringify(hash)) : '';
 
         history.replaceState(null, null, `#${encoded}`);
 
         if (data === '{}') {
             data = '';
-        }
-        else {
+        } else {
             data = data.replace(/\"([^\"]+)\"\:/g, '$1:')
                 .replace(/\"/g, "'")
                 .replace(/\\'/g, '"');
@@ -430,7 +431,6 @@ class TextStyleEditor {
     }
 
     init() {
-
         document.getElementById('renderer').appendChild(this.app.view);
         this.app.render();
         this.resize();
