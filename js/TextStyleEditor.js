@@ -27,6 +27,19 @@ class TextStyleEditor {
         // Placeholder for URL
         this.shortenUrl = '';
 
+        // Save the panel layout
+        this.panels = localStorage.panels ? JSON.parse(localStorage.panels) : {
+            text: true,
+            font: true,
+            fill: false,
+            stroke: false,
+            layout: false,
+            shadow: false,
+            multiline: false,
+            texture: false,
+            background: false
+        };
+
         // Restore the values or get the defaults
         let values = {
             text: localStorage.text || this.defaultText,
@@ -65,6 +78,11 @@ class TextStyleEditor {
         this.app.stop();
     }
 
+    onPanel(id) {
+        this.panels[id] = !this.panels[id];
+        localStorage.panels = JSON.stringify(this.panels);
+    }
+
     view() {
         const init = this.init.bind(this);
         const onText = this.onText.bind(this);
@@ -73,6 +91,17 @@ class TextStyleEditor {
         const reset = this.reset.bind(this);
         const onFormat = this.onFormat.bind(this);
         const onShorten = this.onShorten.bind(this);
+
+        const panelOptions = (id) => {
+            return { class: this.panels[id] ? 'visible' : 'hidden' };
+        };
+
+        const panelToggle = (id) => {
+            return {
+                onclick: this.onPanel.bind(this, id),
+                class: this.panels[id] ? 'expanded': 'collapsed'
+            };
+        };
 
         return m('div', {oncreate: init}, [
             m('nav.controls', [
@@ -85,8 +114,8 @@ class TextStyleEditor {
                             ' Reset'
                         ])
                     ]),
-                    m('h4', 'Text'),
-                    m('div.row', [
+                    m('h4', panelToggle('text'), 'Text'),
+                    m('div.pane.row', panelOptions('text'), [
                         m('div.col-sm-12', [
                             m('textarea.form-control#input', {
                                 autofocus: true,
@@ -96,111 +125,126 @@ class TextStyleEditor {
                         ])
                     ]),
 
-                    m('h4', 'Font'),
-                    this.select('fontFamily', 'Font Family', [
-                        'Arial',
-                        'Arial Black',
-                        'Comic Sans MS',
-                        'Courier New',
-                        'Georgia',
-                        'Helvetica',
-                        'Impact',
-                        'Tahoma',
-                        'Times New Roman',
-                        'Verdana',
-                        'Georgia, serif',
-                        '"Palatino Linotype", "Book Antiqua", Palatino, serif',
-                        '"Times New Roman", Times, serif',
-                        'Arial, Helvetica, sans-serif',
-                        '"Arial Black", Gadget, sans-serif',
-                        '"Comic Sans MS", cursive, sans-serif',
-                        'Impact, Charcoal, sans-serif',
-                        '"Lucida Sans Unicode", "Lucida Grande", sans-serif',
-                        'Tahoma, Geneva, sans-serif',
-                        '"Trebuchet MS", Helvetica, sans-serif',
-                        'Verdana, Geneva, sans-serif',
-                        '"Courier New", Courier, monospace',
-                        '"Lucida Console", Monaco, monospace'
-                    ]),
-                    this.number('fontSize', 'Font Size', 1, 1),
-                    this.select('fontStyle', 'Font Style', [
-                        'normal',
-                        'italic',
-                        'oblique'
-                    ]),
-                    this.select('fontVariant', 'Font Variant', [
-                        'normal',
-                        'small-caps'
-                    ]),
-                    this.select('fontWeight', 'Font Weight', [
-                        'normal',
-                        'bold',
-                        'bolder',
-                        'lighter',
-                        '100',
-                        '200',
-                        '300',
-                        '400',
-                        '500',
-                        '600',
-                        '700',
-                        '800',
-                        '900'
-                    ]),
-
-                    m('h4', 'Fill'),
-                    this.gradient('fill', 'Color'),
-                    this.select('fillGradientType', 'Gradient Type', [
-                        [0, 'linear vertical'],
-                        [1, 'linear horizontal']
-                    ]),
-                    this.stopPoints('fillGradientStops', 'Fill Gradient Stops', 0.1, 0, 1),
-
-                    m('h4', 'Stroke'),
-                    this.color('stroke', 'Color'),
-                    this.number('strokeThickness', 'Thickness', 1, 0),
-                    this.select('lineJoin', 'Line Join', [
-                        'miter',
-                        'round',
-                        'bevel'
-                    ]),
-                    this.number('miterLimit', 'Miter Limit', 1, 0),
-
-                    m('h4', 'Layout'),
-                    this.number('letterSpacing', 'Letter Spacing'),
-                    this.select('textBaseline', 'Text Baseline', [
-                        'alphabetic',
-                        'bottom',
-                        'middle',
-                        'top',
-                        'hanging'
+                    m('h4', panelToggle('font'), 'Font'),
+                    m('div.pane', panelOptions('font'), [
+                        this.select('fontFamily', 'Font Family', [
+                            'Arial',
+                            'Arial Black',
+                            'Comic Sans MS',
+                            'Courier New',
+                            'Georgia',
+                            'Helvetica',
+                            'Impact',
+                            'Tahoma',
+                            'Times New Roman',
+                            'Verdana',
+                            'Georgia, serif',
+                            '"Palatino Linotype", "Book Antiqua", Palatino, serif',
+                            '"Times New Roman", Times, serif',
+                            'Arial, Helvetica, sans-serif',
+                            '"Arial Black", Gadget, sans-serif',
+                            '"Comic Sans MS", cursive, sans-serif',
+                            'Impact, Charcoal, sans-serif',
+                            '"Lucida Sans Unicode", "Lucida Grande", sans-serif',
+                            'Tahoma, Geneva, sans-serif',
+                            '"Trebuchet MS", Helvetica, sans-serif',
+                            'Verdana, Geneva, sans-serif',
+                            '"Courier New", Courier, monospace',
+                            '"Lucida Console", Monaco, monospace'
+                        ]),
+                        this.number('fontSize', 'Font Size', 1, 1),
+                        this.select('fontStyle', 'Font Style', [
+                            'normal',
+                            'italic',
+                            'oblique'
+                        ]),
+                        this.select('fontVariant', 'Font Variant', [
+                            'normal',
+                            'small-caps'
+                        ]),
+                        this.select('fontWeight', 'Font Weight', [
+                            'normal',
+                            'bold',
+                            'bolder',
+                            'lighter',
+                            '100',
+                            '200',
+                            '300',
+                            '400',
+                            '500',
+                            '600',
+                            '700',
+                            '800',
+                            '900'
+                        ]),
                     ]),
 
-                    m('h4', 'Drop Shadow'),
-                    this.checkbox('dropShadow', 'Enable'),
-                    this.color('dropShadowColor', 'Color'),
-                    this.number('dropShadowAlpha', 'Alpha', 0.1, 0, 1),
-                    this.number('dropShadowAngle', 'Angle', 0.1),
-                    this.number('dropShadowBlur', 'Blur'),
-                    this.number('dropShadowDistance', 'Distance'),
-
-                    m('h4', 'Multiline'),
-                    this.checkbox('wordWrap', 'Enable'),
-                    this.checkbox('breakWords', 'Break Words'),
-                    this.select('align', 'Align', [
-                        'left',
-                        'center',
-                        'right'
+                    m('h4', panelToggle('fill'), 'Fill'),
+                    m('div.pane', panelOptions('fill'), [
+                        this.gradient('fill', 'Color'),
+                        this.select('fillGradientType', 'Gradient Type', [
+                            [0, 'linear vertical'],
+                            [1, 'linear horizontal']
+                        ]),
+                        this.stopPoints('fillGradientStops', 'Fill Gradient Stops', 0.1, 0, 1),
                     ]),
-                    this.number('wordWrapWidth', 'Wrap Width', 10, 0),
-                    this.number('lineHeight', 'Line Height', 1, 0),
 
-                    m('h4', 'Texture'),
-                    this.number('padding', 'Padding'),
-                    this.checkbox('trim', 'Trim'),
+                    m('h4', panelToggle('stroke'), 'Stroke'),
+                    m('div.pane', panelOptions('stroke'), [
+                        this.color('stroke', 'Color'),
+                        this.number('strokeThickness', 'Thickness', 1, 0),
+                        this.select('lineJoin', 'Line Join', [
+                            'miter',
+                            'round',
+                            'bevel'
+                        ]),
+                        this.number('miterLimit', 'Miter Limit', 1, 0),
+                    ]),
 
-                    m('h4', 'Background'),
-                    m(StyleBackgroundColor, { parent: this, id: 'backgroundColor', name: 'Color' })
+                    m('h4', panelToggle('layout'), 'Layout'),
+                    m('div.pane', panelOptions('layout'), [
+                        this.number('letterSpacing', 'Letter Spacing'),
+                        this.select('textBaseline', 'Text Baseline', [
+                            'alphabetic',
+                            'bottom',
+                            'middle',
+                            'top',
+                            'hanging'
+                        ]),
+                    ]),
+
+                    m('h4', panelToggle('shadow'), 'Drop Shadow'),
+                    m('div.pane', panelOptions('shadow'), [
+                        this.checkbox('dropShadow', 'Enable'),
+                        this.color('dropShadowColor', 'Color'),
+                        this.number('dropShadowAlpha', 'Alpha', 0.1, 0, 1),
+                        this.number('dropShadowAngle', 'Angle', 0.1),
+                        this.number('dropShadowBlur', 'Blur'),
+                        this.number('dropShadowDistance', 'Distance'),
+                    ]),
+
+                    m('h4', panelToggle('multiline'), 'Multiline'),
+                    m('div.pane', panelOptions('multiline'), [
+                        this.checkbox('wordWrap', 'Enable'),
+                        this.checkbox('breakWords', 'Break Words'),
+                        this.select('align', 'Align', [
+                            'left',
+                            'center',
+                            'right'
+                        ]),
+                        this.number('wordWrapWidth', 'Wrap Width', 10, 0),
+                        this.number('lineHeight', 'Line Height', 1, 0),
+                    ]),
+                    m('h4', panelToggle('texture'), 'Texture'),
+                    m('div.pane', panelOptions('texture'), [
+                        this.number('padding', 'Padding'),
+                        this.checkbox('trim', 'Trim'),
+                    ]),
+
+                    m('h4', panelToggle('background'), 'Background'),
+                    m('div.pane', panelOptions('background'), [
+                        m(StyleBackgroundColor, { parent: this, id: 'backgroundColor', name: 'Color' })
+                    ])
                 ])
             ]),
             m('main.main', [

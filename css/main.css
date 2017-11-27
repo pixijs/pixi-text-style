@@ -101,6 +101,22 @@ h3 {
     background-color: #d8d9e0;
 }
 
+
+.controls h4 {
+    cursor: pointer;
+}
+
+.controls .collapsed:before {
+    content: '\25B8';
+    display: inline-block;
+    width: 20px;
+}
+.controls .expanded:before {
+    content: '\25BE';
+    display: inline-block;
+    width: 20px;
+}
+
 .controls .row {
     min-height:36px;
 }
