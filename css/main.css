@@ -86,6 +86,9 @@ h3 {
     border-radius: 4px;
 }
 
+.config {
+    margin-bottom:4px;
+}
 .config label {
     padding-top: 4px;
 }

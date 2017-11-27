@@ -24,6 +24,9 @@ class TextStyleEditor {
         // Spacing type
         this.indent = parseInt(localStorage.indent) || TextStyleEditor.INDENT.SPACE_4;
 
+        // Placeholder for URL
+        this.shortenUrl = '';
+
         // Restore the values or get the defaults
         let values = {
             text: localStorage.text || this.defaultText,
@@ -69,6 +72,7 @@ class TextStyleEditor {
         const resize = this.resize.bind(this);
         const reset = this.reset.bind(this);
         const onFormat = this.onFormat.bind(this);
+        const onShorten = this.onShorten.bind(this);
 
         return m('div', {oncreate: init}, [
             m('nav.controls', [
@@ -258,6 +262,25 @@ class TextStyleEditor {
                                     m('option', {value: TextStyleEditor.INDENT.NONE_PRETTY}, 'No indent (with spaces)')
                                 ])
                             ])
+                        ]),
+                        m('div.row.config', [
+                            m('label.col-md-2.col-sm-3', [
+                                m('span.glyphicon.glyphicon-share'),
+                                m('span.name', 'Share')
+                            ]),
+                            m('div.col-md-10.col-sm-9', [
+                                m('div.input-group', [
+                                    m('span.input-group-btn', [
+                                        m('button.btn.btn-sm.btn-primary', {
+                                            onclick: onShorten
+                                        }, 'Shorten URL')
+                                    ]),
+                                    m('input.form-control.input-sm', {
+                                        type: 'text',
+                                        value: this.shortenUrl
+                                    })
+                                ])
+                            ])
                         ])
                     ])
                 ]),
@@ -310,6 +333,19 @@ class TextStyleEditor {
         this.indent = parseInt(element.target.value);
         localStorage.indent = this.indent;
         m.redraw();
+    }
+
+    onShorten() {
+        const url = 'https://www.googleapis.com/urlshortener/v1/url';
+        const key = 'AIzaSyCc-YIpSnyqr3RQcBN8-s-8u8DRXGECon0';
+        m.request({
+            method: 'POST',
+            url: `${url}?key=${key}`,
+            data: { longUrl: document.location.href }
+        })
+        .then((data) => {
+            this.shortenUrl = data.id;
+        });
     }
 
     reset() {
