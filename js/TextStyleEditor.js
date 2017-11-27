@@ -410,7 +410,7 @@ class TextStyleEditor {
 
             if (pretty) {
                 data = this.prettify(data);
-        }
+            }
         }
 
         const text = this.text.text.replace(/\n/g, '\\n')
