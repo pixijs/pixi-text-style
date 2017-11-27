@@ -1,11 +1,11 @@
-'use strict';
+import StyleComponent from './StyleComponent';
 
 /**
  * Input number selector
  * @class StyleNumber
  * @extends StyleComponent
  */
-class StyleNumber extends StyleComponent {
+export default class StyleNumber extends StyleComponent {
     constructor(vnode) {
         super(vnode);
         this.step = vnode.attrs.step || 1;

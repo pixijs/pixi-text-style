@@ -1,0 +1,15 @@
+{
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "globals": {
+        "m": false,
+        "PIXI": false,
+        "hljs": false
+    },
+    "env": {
+        "browser": true
+    }
+}

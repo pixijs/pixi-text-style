@@ -1,11 +1,11 @@
-'use strict';
+import StyleColor from './StyleColor';
 
 /**
  * Input number selector
  * @class StyleColor
  * @extends StyleComponent
  */
-class StyleColorGradient extends StyleColor {
+export default class StyleColorGradient extends StyleColor {
     init() {
         const values = this.parent.style[this.id];
         let contents;
@@ -15,7 +15,7 @@ class StyleColorGradient extends StyleColor {
         else {
             contents = values.map((color, i) => {
 
-                let down, up, buttons = [
+                let buttons = [
                     m('button.btn.btn-sm.btn-default', {
                         key: this.id + 'Remove' + i,
                         onclick: this.removeStop.bind(this, i)
@@ -65,7 +65,7 @@ class StyleColorGradient extends StyleColor {
 
     moveUpStop(index) {
         if (index === 0) {
-            console.log('Already at top');
+            //console.log('Already at top');
             return;
         }
         const values = this.parent.style[this.id];
@@ -78,7 +78,7 @@ class StyleColorGradient extends StyleColor {
     moveDownStop(index) {
         const values = this.parent.style[this.id];
         if (index === values.length - 1) {
-            console.log("already at the bottom");
+            //console.log("already at the bottom");
             return;
         }
         const temp = values[index];

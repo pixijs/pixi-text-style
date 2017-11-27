@@ -1,10 +1,8 @@
-'use strict';
-
 /**
  * Base control for style elements
  * @class StyleComponent
  */
-class StyleComponent {
+export default class StyleComponent {
     constructor(vnode) {
         this.parent = vnode.attrs.parent;
         this.id = vnode.attrs.id;
@@ -25,11 +23,11 @@ class StyleComponent {
             value = value.map(v => this.parse(v));
         }
         // Handle integers as strings
-        else if (/^\-?\d+$/.test(value)) {
+        else if (/^-?\d+$/.test(value)) {
             value = parseInt(value);
         }
         // Handle floats as strings
-        else if(/^\-?\d*\.\d+$/.test(value)) {
+        else if(/^-?\d*\.\d+$/.test(value)) {
             value = parseFloat(value);
         }
         return value;

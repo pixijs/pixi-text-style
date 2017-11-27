@@ -1,6 +1,4 @@
-'use strict';
-
-function deepCopy(target, source) {
+export default function deepCopy(target, source) {
     for (const prop in source) {
         if (Array.isArray(source[prop])) {
             target[prop] = source[prop].slice();

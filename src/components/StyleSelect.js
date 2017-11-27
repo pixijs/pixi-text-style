@@ -1,15 +1,15 @@
-'use strict';
+import StyleComponent from './StyleComponent';
 
 /**
  * Select element with options
  * @class StyleSelect
  * @extends StyleComponent
  */
-class StyleSelect extends StyleComponent {
+export default class StyleSelect extends StyleComponent {
     constructor(vnode) {
         super(vnode);
         this.options = vnode.attrs.options.map(value => {
-            name = value;
+            let name = value;
             if (Array.isArray(value)) {
                 name = value[1];
                 value = String(value[0]);

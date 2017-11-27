@@ -1,11 +1,11 @@
-'use strict';
+import StyleComponent from './StyleComponent';
 
 /**
  * Input selector for stop points, for example, on a color gradient
  * @class StyleStopPoints
  * @extends StyleComponent
  */
-class StyleStopPoints extends StyleComponent {
+export default class StyleStopPoints extends StyleComponent {
     constructor(vnode) {
         super(vnode);
         this.step = vnode.attrs.step || 1;

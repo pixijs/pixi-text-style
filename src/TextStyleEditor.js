@@ -1,10 +1,18 @@
-'use strict';
+import StyleBackgroundColor from './components/StyleBackgroundColor';
+import StyleCheckbox from './components/StyleCheckbox';
+import StyleColor from './components/StyleColor';
+import StyleColorGradient from './components/StyleColorGradient';
+import StyleNumber from './components/StyleNumber';
+import StyleSelect from './components/StyleSelect';
+import StyleStopPoints from './components/StyleStopPoints';
+import deepCopy from './utils/deepCopy';
+import deepEqual from './utils/deepEqual';
 
 /**
  * TextStyle Component for Mithril
  * @class TextStyleEditor
  */
-class TextStyleEditor {
+export default class TextStyleEditor {
 
     constructor() {
         this.defaults = new PIXI.TextStyle();
@@ -87,7 +95,6 @@ class TextStyleEditor {
         const init = this.init.bind(this);
         const onText = this.onText.bind(this);
         const codeColor = this.codeColor.bind(this);
-        const resize = this.resize.bind(this);
         const reset = this.reset.bind(this);
         const onFormat = this.onFormat.bind(this);
         const onShorten = this.onShorten.bind(this);
@@ -484,9 +491,9 @@ class TextStyleEditor {
         if (data === '{}') {
             data = '';
         } else {
-            data = data.replace(/\"([^\"]+)\"\:/g, '$1:')
-                .replace(/\"/g, "'")
-                .replace(/\\'/g, '"');
+            data = data.replace(/"([^"]+)":/g, '$1:')
+                .replace(/"/g, "'")
+                .replace(/'/g, '"');
 
             if (pretty) {
                 data = this.prettify(data);
@@ -494,7 +501,7 @@ class TextStyleEditor {
         }
 
         const text = this.text.text.replace(/\n/g, '\\n')
-            .replace(/\'/g, '\\\'');
+            .replace(/'/g, '\\\'');
 
         return `const style = new PIXI.TextStyle(${data});\n`
             + `const text = new PIXI.Text('${text}', style);`;

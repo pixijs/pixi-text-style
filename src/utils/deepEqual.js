@@ -1,6 +1,4 @@
-'use strict';
-
-function deepEqual(a, b) {
+export default function deepEqual(a, b) {
     if (a === b) {
         return true;
     }
@@ -12,6 +10,7 @@ function deepEqual(a, b) {
     let propsInA = 0;
     let propsInB = 0;
 
+    // eslint-disable-next-line no-unused-vars
     for (const prop in a) {
         ++propsInA;
     }
