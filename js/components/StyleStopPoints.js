@@ -40,7 +40,7 @@ class StyleStopPoints extends StyleComponent {
                 ]);
             });
         }
-        return m('div', contents.concat([
+        return m('div.gradient', contents.concat([
             m('button.btn-block.btn.btn-sm.btn-default', {
                 key: this.id + 'Add',
                 onclick: this.addStop.bind(this)
