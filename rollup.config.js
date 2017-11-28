@@ -22,7 +22,6 @@ export default {
         }),
         eslint({
             throwOnError: true,
-            throwOnWarning: true,
             include: 'src/**.js'
         }),
         postcss({

@@ -7,7 +7,8 @@
     "globals": {
         "m": false,
         "PIXI": false,
-        "hljs": false
+        "hljs": false,
+        "saveAs": false
     },
     "env": {
         "browser": true
@@ -50,7 +51,7 @@
             "warn"
         ],
         "no-trailing-spaces": [
-            "error"
+            "warn"
         ]
     }
 }

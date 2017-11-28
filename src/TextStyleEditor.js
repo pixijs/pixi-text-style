@@ -278,7 +278,23 @@ export default class TextStyleEditor {
                 m('div.col-sm-6', [
                     m('h3', [
                         m('span.glyphicon.glyphicon-scissors'),
-                        m('span', 'JSON')
+                        m('span', 'JSON'),
+                        m('span.btn-group.pull-right', [
+                            m('button.btn.btn-primary.btn-sm', {
+                                onclick: this.onSave.bind(this)
+                            },[
+                                m('span.glyphicon.glyphicon-save'),
+                                m('span', 'Save')
+                            ]),
+                            m('span.btn.btn-primary.btn-sm.btn-file', [
+                                m('span.glyphicon.glyphicon-open'),
+                                m('span', 'Load'),
+                                m('input', {
+                                    type: 'file',
+                                    onchange: this.onLoad.bind(this)
+                                })
+                            ])
+                        ])
                     ]),
                     m('pre.code-display.hljs', [
                         m('code.json', {
@@ -385,6 +401,45 @@ export default class TextStyleEditor {
         m.redraw();
     }
 
+    onLoad(event) {
+        const input = event.target;
+        if (input.files.length !== 1) {
+            return;
+        }
+        if (!/\.json$/.test(input.files[0].name)) {
+            alert('Unable to load, must be a JSON file.');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+            try {
+                const style = JSON.parse(reader.result);
+                deepCopy(this.style, this.defaults.toJSON());
+                deepCopy(this.style, style);
+                m.redraw();
+                this.app.render();
+            }
+            catch(e) {
+                alert('Unable to parse JSON file');
+            }
+        };
+        reader.readAsText(input.files[0]);
+    }
+
+    onSave() {
+        const style = this.style.toJSON();
+        for (const name in style) {
+            if (deepEqual(style[name], this.defaults[name])) {
+                delete style[name];
+            }
+        }
+        const data = JSON.stringify(style, null, this.getIndent());
+        const blob = new Blob([data], {
+            type: 'text/plain;charset=utf-8'
+        });
+        saveAs(blob, 'style.json');
+    }
+
     onShorten() {
         const url = 'https://www.googleapis.com/urlshortener/v1/url';
         const key = 'AIzaSyCc-YIpSnyqr3RQcBN8-s-8u8DRXGECon0';
@@ -438,6 +493,18 @@ export default class TextStyleEditor {
         hljs.highlightBlock(element.dom);
     }
 
+    getIndent() {
+        let indent;
+        switch(this.indent) {
+            case TextStyleEditor.INDENT.SPACE_4: indent = '    '; break;
+            case TextStyleEditor.INDENT.SPACE_3: indent = '   '; break;
+            case TextStyleEditor.INDENT.SPACE_2: indent = '  '; break;
+            case TextStyleEditor.INDENT.TAB: indent = '\t'; break;
+            default: indent = ''; break;
+        }
+        return indent;
+    }
+
     getCode(jsonOnly) {
         const style = this.style.toJSON();
         for (const name in style) {
@@ -446,17 +513,8 @@ export default class TextStyleEditor {
             }
         }
 
-        let indent;
-        let pretty = false;
-
-        switch(this.indent) {
-            case TextStyleEditor.INDENT.SPACE_4: indent = '    '; break;
-            case TextStyleEditor.INDENT.SPACE_3: indent = '   '; break;
-            case TextStyleEditor.INDENT.SPACE_2: indent = '  '; break;
-            case TextStyleEditor.INDENT.TAB: indent = '\t'; break;
-            case TextStyleEditor.INDENT.NONE_PRETTY: pretty = true; break;
-            default: indent = ''; break;
-        }
+        const indent = this.getIndent();
+        const pretty = TextStyleEditor.INDENT.NONE_PRETTY === this.indent;
 
         let data = JSON.stringify(style, null, indent);
 
