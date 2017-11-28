@@ -4,11 +4,11 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "clean": "rimraf dist/bundle*",
+    "clean": "rimraf dist/*",
     "prebuild": "npm run clean",
     "lintfix": "eslint --fix src",
     "build": "rollup -c",
-    "watch": "rollup -cw",
+    "watch": "rollup -c --watch --sourcemap",
     "test": "npm run build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
@@ -22,6 +22,7 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.52.0",
     "rollup-plugin-buble": "^0.18.0",
+    "rollup-plugin-copy": "^0.2.3",
     "rollup-plugin-eslint": "^4.0.0",
     "rollup-plugin-postcss": "^0.5.5",
     "rollup-plugin-uglify": "^2.0.1"
