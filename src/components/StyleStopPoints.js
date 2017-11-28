@@ -1,11 +1,11 @@
-'use strict';
+import StyleComponent from './StyleComponent';
 
 /**
  * Input selector for stop points, for example, on a color gradient
  * @class StyleStopPoints
  * @extends StyleComponent
  */
-class StyleStopPoints extends StyleComponent {
+export default class StyleStopPoints extends StyleComponent {
     constructor(vnode) {
         super(vnode);
         this.step = vnode.attrs.step || 1;
@@ -17,7 +17,8 @@ class StyleStopPoints extends StyleComponent {
         let contents;
         if (!Array.isArray(values)) {
             contents = [];
-        } else {
+        }
+        else {
             contents = values.map((value, i) => {
 
                 let buttons = [
@@ -45,8 +46,8 @@ class StyleStopPoints extends StyleComponent {
                 key: this.id + 'Add',
                 onclick: this.addStop.bind(this)
             }, [
-                    m('span.glyphicon.glyphicon-plus'), ' Add Stop Point'
-                ]
+                m('span.glyphicon.glyphicon-plus'), ' Add Stop Point'
+            ]
             )
         ]));
     }

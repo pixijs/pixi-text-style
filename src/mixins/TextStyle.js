@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Add a `toJSON` function for TextStyle
  * to more easily do the serialization

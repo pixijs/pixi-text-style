@@ -1,11 +1,11 @@
-'use strict';
+import StyleComponent from './StyleComponent';
 
 /**
  * Input checkbox with boolean output
  * @class StyleCheckbox
  * @extends StyleComponent
  */
-class StyleCheckbox extends StyleComponent {
+export default class StyleCheckbox extends StyleComponent {
     init() {
         return m('input.check[type=checkbox]#'+this.id, {
             key: this.id,

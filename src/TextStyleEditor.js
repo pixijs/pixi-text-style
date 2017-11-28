@@ -1,10 +1,17 @@
-'use strict';
+import StyleBackgroundColor from './components/StyleBackgroundColor';
+import StyleCheckbox from './components/StyleCheckbox';
+import StyleColor from './components/StyleColor';
+import StyleColorGradient from './components/StyleColorGradient';
+import StyleNumber from './components/StyleNumber';
+import StyleSelect from './components/StyleSelect';
+import StyleStopPoints from './components/StyleStopPoints';
+import { deepCopy, deepEqual } from './utils';
 
 /**
  * TextStyle Component for Mithril
  * @class TextStyleEditor
  */
-class TextStyleEditor {
+export default class TextStyleEditor {
 
     constructor() {
         this.defaults = new PIXI.TextStyle();
@@ -87,7 +94,6 @@ class TextStyleEditor {
         const init = this.init.bind(this);
         const onText = this.onText.bind(this);
         const codeColor = this.codeColor.bind(this);
-        const resize = this.resize.bind(this);
         const reset = this.reset.bind(this);
         const onFormat = this.onFormat.bind(this);
         const onShorten = this.onShorten.bind(this);
@@ -272,7 +278,23 @@ class TextStyleEditor {
                 m('div.col-sm-6', [
                     m('h3', [
                         m('span.glyphicon.glyphicon-scissors'),
-                        m('span', 'JSON')
+                        m('span', 'JSON'),
+                        m('span.btn-group.pull-right', [
+                            m('button.btn.btn-primary.btn-sm', {
+                                onclick: this.onSave.bind(this)
+                            },[
+                                m('span.glyphicon.glyphicon-save'),
+                                m('span', 'Save')
+                            ]),
+                            m('span.btn.btn-primary.btn-sm.btn-file', [
+                                m('span.glyphicon.glyphicon-open'),
+                                m('span', 'Load'),
+                                m('input', {
+                                    type: 'file',
+                                    onchange: this.onLoad.bind(this)
+                                })
+                            ])
+                        ])
                     ]),
                     m('pre.code-display.hljs', [
                         m('code.json', {
@@ -379,6 +401,45 @@ class TextStyleEditor {
         m.redraw();
     }
 
+    onLoad(event) {
+        const input = event.target;
+        if (input.files.length !== 1) {
+            return;
+        }
+        if (!/\.json$/.test(input.files[0].name)) {
+            alert('Unable to load, must be a JSON file.');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+            try {
+                const style = JSON.parse(reader.result);
+                deepCopy(this.style, this.defaults.toJSON());
+                deepCopy(this.style, style);
+                m.redraw();
+                this.app.render();
+            }
+            catch(e) {
+                alert('Unable to parse JSON file');
+            }
+        };
+        reader.readAsText(input.files[0]);
+    }
+
+    onSave() {
+        const style = this.style.toJSON();
+        for (const name in style) {
+            if (deepEqual(style[name], this.defaults[name])) {
+                delete style[name];
+            }
+        }
+        const data = JSON.stringify(style, null, this.getIndent());
+        const blob = new Blob([data], {
+            type: 'text/plain;charset=utf-8'
+        });
+        saveAs(blob, 'style.json');
+    }
+
     onShorten() {
         const url = 'https://www.googleapis.com/urlshortener/v1/url';
         const key = 'AIzaSyCc-YIpSnyqr3RQcBN8-s-8u8DRXGECon0';
@@ -387,9 +448,9 @@ class TextStyleEditor {
             url: `${url}?key=${key}`,
             data: { longUrl: document.location.href }
         })
-        .then((data) => {
-            this.shortenUrl = data.id;
-        });
+            .then((data) => {
+                this.shortenUrl = data.id;
+            });
     }
 
     reset() {
@@ -432,6 +493,18 @@ class TextStyleEditor {
         hljs.highlightBlock(element.dom);
     }
 
+    getIndent() {
+        let indent;
+        switch(this.indent) {
+            case TextStyleEditor.INDENT.SPACE_4: indent = '    '; break;
+            case TextStyleEditor.INDENT.SPACE_3: indent = '   '; break;
+            case TextStyleEditor.INDENT.SPACE_2: indent = '  '; break;
+            case TextStyleEditor.INDENT.TAB: indent = '\t'; break;
+            default: indent = ''; break;
+        }
+        return indent;
+    }
+
     getCode(jsonOnly) {
         const style = this.style.toJSON();
         for (const name in style) {
@@ -440,17 +513,8 @@ class TextStyleEditor {
             }
         }
 
-        let indent;
-        let pretty = false;
-
-        switch(this.indent) {
-            case TextStyleEditor.INDENT.SPACE_4: indent = '    '; break;
-            case TextStyleEditor.INDENT.SPACE_3: indent = '   '; break;
-            case TextStyleEditor.INDENT.SPACE_2: indent = '  '; break;
-            case TextStyleEditor.INDENT.TAB: indent = '\t'; break;
-            case TextStyleEditor.INDENT.NONE_PRETTY: pretty = true; break;
-            default: indent = ''; break;
-        }
+        const indent = this.getIndent();
+        const pretty = TextStyleEditor.INDENT.NONE_PRETTY === this.indent;
 
         let data = JSON.stringify(style, null, indent);
 
@@ -483,10 +547,11 @@ class TextStyleEditor {
 
         if (data === '{}') {
             data = '';
-        } else {
-            data = data.replace(/\"([^\"]+)\"\:/g, '$1:')
-                .replace(/\"/g, "'")
-                .replace(/\\'/g, '"');
+        }
+        else {
+            data = data.replace(/"([^"]+)":/g, '$1:')
+                .replace(/"/g, '\'')
+                .replace(/'/g, '"');
 
             if (pretty) {
                 data = this.prettify(data);
@@ -494,7 +559,7 @@ class TextStyleEditor {
         }
 
         const text = this.text.text.replace(/\n/g, '\\n')
-            .replace(/\'/g, '\\\'');
+            .replace(/'/g, '\\\'');
 
         return `const style = new PIXI.TextStyle(${data});\n`
             + `const text = new PIXI.Text('${text}', style);`;
