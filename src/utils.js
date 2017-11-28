@@ -1,9 +1,20 @@
-export default function deepEqual(a, b) {
+export function deepCopy(target, source) {
+    for (const prop in source) {
+        if (Array.isArray(source[prop])) {
+            target[prop] = source[prop].slice();
+        }
+        else {
+            target[prop] = source[prop];
+        }
+    }
+}
+
+export function deepEqual(a, b) {
     if (a === b) {
         return true;
     }
 
-    if (typeof a !== typeof b || a == null || b === null || typeof a !== "object" || typeof b !== "object") {
+    if (typeof a !== typeof b || a === null || b === null || typeof a !== 'object' || typeof b !== 'object') {
         return false;
     }
 

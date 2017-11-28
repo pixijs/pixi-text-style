@@ -5,8 +5,7 @@ import StyleColorGradient from './components/StyleColorGradient';
 import StyleNumber from './components/StyleNumber';
 import StyleSelect from './components/StyleSelect';
 import StyleStopPoints from './components/StyleStopPoints';
-import deepCopy from './utils/deepCopy';
-import deepEqual from './utils/deepEqual';
+import { deepCopy, deepEqual } from './utils';
 
 /**
  * TextStyle Component for Mithril
@@ -394,9 +393,9 @@ export default class TextStyleEditor {
             url: `${url}?key=${key}`,
             data: { longUrl: document.location.href }
         })
-        .then((data) => {
-            this.shortenUrl = data.id;
-        });
+            .then((data) => {
+                this.shortenUrl = data.id;
+            });
     }
 
     reset() {
@@ -490,9 +489,10 @@ export default class TextStyleEditor {
 
         if (data === '{}') {
             data = '';
-        } else {
+        }
+        else {
             data = data.replace(/"([^"]+)":/g, '$1:')
-                .replace(/"/g, "'")
+                .replace(/"/g, '\'')
                 .replace(/'/g, '"');
 
             if (pretty) {

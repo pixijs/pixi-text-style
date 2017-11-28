@@ -1,6 +1,7 @@
 import buble from 'rollup-plugin-buble';
 import uglify from 'rollup-plugin-uglify';
 import postcss from 'rollup-plugin-postcss';
+import eslint from 'rollup-plugin-eslint';
 import cssnano from 'cssnano';
 
 export default {
@@ -11,6 +12,11 @@ export default {
         sourcemap: true
     },
     plugins: [
+        eslint({
+            throwOnError: true,
+            throwOnWarning: true,
+            include: 'src/**.js'
+        }),
         postcss({
             plugins: [cssnano],
             sourceMap: true,

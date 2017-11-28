@@ -17,7 +17,8 @@ export default class StyleStopPoints extends StyleComponent {
         let contents;
         if (!Array.isArray(values)) {
             contents = [];
-        } else {
+        }
+        else {
             contents = values.map((value, i) => {
 
                 let buttons = [
@@ -45,8 +46,8 @@ export default class StyleStopPoints extends StyleComponent {
                 key: this.id + 'Add',
                 onclick: this.addStop.bind(this)
             }, [
-                    m('span.glyphicon.glyphicon-plus'), ' Add Stop Point'
-                ]
+                m('span.glyphicon.glyphicon-plus'), ' Add Stop Point'
+            ]
             )
         ]));
     }

@@ -49,13 +49,13 @@ export default class StyleColor extends StyleComponent {
 
     stringToHex(str) {
         let hex = this.stringMap[str] || str;
-        hex = hex.replace(/^#([a-f0-9])([a-f0-9])([a-f0-9])$/, "#$1$1$2$2$3$3");
+        hex = hex.replace(/^#([a-f0-9])([a-f0-9])([a-f0-9])$/, '#$1$1$2$2$3$3');
         return hex;
     }
 
     hexToString(hex) {
         // Convert to shortened with double repeating colors
-        const str = hex.replace(/([a-f0-9])\1([a-f0-9])\2([a-f0-9])\3/, "$1$2$3");
+        const str = hex.replace(/([a-f0-9])\1([a-f0-9])\2([a-f0-9])\3/, '$1$2$3');
         return this.colorMap[str] || str;
     }
 }
