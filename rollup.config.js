@@ -30,17 +30,6 @@ export default {
         }),
         eslint({
             throwOnError: true,
-            parserOptions: {
-                ecmaFeatures: {
-                    jsx: true
-                }
-            },
-            plugins: ['react'],
-            extends: 'eslint:recommended',
-            rules: {
-                'react/jsx-uses-react': 'error',
-                'react/jsx-uses-vars': 'error' 
-            },
             include: ['src/**.jsx', 'src/**.js']
         }),
         postcss({
