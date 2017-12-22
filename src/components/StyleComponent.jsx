@@ -9,12 +9,11 @@ export default class StyleComponent {
         this.name = vnode.attrs.name;
     }
     view() {
-        const id = this.id;
         // Wrap around all elements
-        return m('div.row', [
-            m('label.col-xs-5', {for: id, title: id}, this.name),
-            m('div.col-xs-7', [ this.init() ])
-        ]);
+        return <div className="row">
+            <label className="col-xs-5" for={this.id} title={this.id}>{this.name}</label>
+            <div className="col-xs-7">{this.init()}</div>
+        </div>;
     }
 
     parse(value) {

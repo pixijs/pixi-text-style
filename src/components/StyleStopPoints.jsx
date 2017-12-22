@@ -1,4 +1,5 @@
 import StyleComponent from './StyleComponent';
+import m from 'mithril';
 
 /**
  * Input selector for stop points, for example, on a color gradient
@@ -22,34 +23,36 @@ export default class StyleStopPoints extends StyleComponent {
             contents = values.map((value, i) => {
 
                 let buttons = [
-                    m('button.btn.btn-sm.btn-default', {
-                        key: this.id + 'Remove' + i,
-                        onclick: this.removeStop.bind(this, i)
-                    }, m('span.glyphicon.glyphicon-remove'))
+                    <button className="btn btn-sm btn-default" key={this.id + 'Remove' + i}
+                        onclick={this.removeStop.bind(this, i)}>
+                        <span className="glyphicon glyphicon-remove"></span>
+                    </button>
                 ];
 
-                return m('div.input-group.color-group', [
-                    m('input.form-control.input-sm.number[type=number]#' + this.id + i, {
-                        key: this.id + i,
-                        oninput: m.withAttr('value', this.updateIndex.bind(this, i)),
-                        step: this.step,
-                        min: this.min,
-                        max: this.max,
-                        value
-                    }),
-                    m('span.input-group-btn', buttons)
-                ]);
+                return <div className="input-group color-group">
+                    <input className="form-control input-sm number"
+                        type="number"
+                        id={this.id + i}
+                        key={this.id + i}
+                        oninput={m.withAttr('value', this.updateIndex.bind(this, i))}
+                        step={this.step}
+                        min={this.min}
+                        max={this.max}
+                        value={value} />
+                    <span className="input-group-btn">{buttons}</span>
+                </div>;
             });
         }
-        return m('div.gradient', contents.concat([
-            m('button.btn-block.btn.btn-sm.btn-default', {
-                key: this.id + 'Add',
-                onclick: this.addStop.bind(this)
-            }, [
-                m('span.glyphicon.glyphicon-plus'), ' Add Stop Point'
-            ]
-            )
-        ]));
+
+        return <div className="gradient">
+            {contents}
+            <button className="btn-block btn btn-sm btn-default"
+                key={this.id + 'Add'}
+                onclick={this.addStop.bind(this)}>
+                <span className="glyphicon glyphicon-plus"></span>
+                Add Stop Point
+            </button>
+        </div>;
     }
 
     removeStop(index) {
