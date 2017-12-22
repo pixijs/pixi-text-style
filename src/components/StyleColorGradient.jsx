@@ -17,19 +17,19 @@ export default class StyleColorGradient extends StyleColor {
             contents = values.map((color, i) => {
 
                 let buttons = [
-                    <button className="btn btn-sm btn-default"
+                    <button class="btn btn-sm btn-default"
                         key={this.id + 'Remove' + i}
                         onclick={this.removeStop.bind(this, i)}>
-                        <span className="glyphicon glyphicon-remove"></span>
+                        <span class="glyphicon glyphicon-remove"></span>
                     </button>
                 ];
 
                 if (i > 0) {
                     buttons.unshift(
-                        <button className="btn btn-sm btn-default"
+                        <button class="btn btn-sm btn-default"
                             key={this.id + 'Up' + i}
                             onclick={this.moveUpStop.bind(this, i)}>
-                            <span className="glyphicon glyphicon-arrow-up"></span>
+                            <span class="glyphicon glyphicon-arrow-up"></span>
                         </button>
                     );
                 }
@@ -38,17 +38,17 @@ export default class StyleColorGradient extends StyleColor {
                     const className = `btn btn-sm btn-default ${(i === values.length - 1 ? 'disabled': '')}`;
 
                     buttons.unshift(
-                        <button className={className}
+                        <button class={className}
                             key={this.id + 'Down' + i}
                             disabled={i === values.length - 1}
                             onclick={this.moveDownStop.bind(this, i)}>
-                            <span className="glyphicon glyphicon-arrow-down"></span>
+                            <span class="glyphicon glyphicon-arrow-down"></span>
                         </button>
                     );
                 }
 
-                return <div className="input-group color-group">
-                    <input className="form-control input-sm color"
+                return <div class="input-group color-group">
+                    <input class="form-control input-sm color"
                         type="color"
                         id={this.id + i}
                         key={this.id + i}
@@ -58,12 +58,12 @@ export default class StyleColorGradient extends StyleColor {
                 </div>;
             });
         }
-        return <div className="gradient">
+        return <div class="gradient">
             {contents}
-            <button className="btn-block btn btn-sm btn-default"
+            <button class="btn-block btn btn-sm btn-default"
                 key={this.id + 'Add'}
                 onclick={this.addStop.bind(this)}>
-                <span className="glyphicon glyphicon-plus"></span>
+                <span class="glyphicon glyphicon-plus"></span>
                 Add Color
             </button>
         </div>;

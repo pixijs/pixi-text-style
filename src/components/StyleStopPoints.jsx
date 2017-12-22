@@ -23,14 +23,14 @@ export default class StyleStopPoints extends StyleComponent {
             contents = values.map((value, i) => {
 
                 let buttons = [
-                    <button className="btn btn-sm btn-default" key={this.id + 'Remove' + i}
+                    <button class="btn btn-sm btn-default" key={this.id + 'Remove' + i}
                         onclick={this.removeStop.bind(this, i)}>
-                        <span className="glyphicon glyphicon-remove"></span>
+                        <span class="glyphicon glyphicon-remove"></span>
                     </button>
                 ];
 
-                return <div className="input-group color-group">
-                    <input className="form-control input-sm number"
+                return <div class="input-group color-group">
+                    <input class="form-control input-sm number"
                         type="number"
                         id={this.id + i}
                         key={this.id + i}
@@ -39,17 +39,17 @@ export default class StyleStopPoints extends StyleComponent {
                         min={this.min}
                         max={this.max}
                         value={value} />
-                    <span className="input-group-btn">{buttons}</span>
+                    <span class="input-group-btn">{buttons}</span>
                 </div>;
             });
         }
 
-        return <div className="gradient">
+        return <div class="gradient">
             {contents}
-            <button className="btn-block btn btn-sm btn-default"
+            <button class="btn-block btn btn-sm btn-default"
                 key={this.id + 'Add'}
                 onclick={this.addStop.bind(this)}>
-                <span className="glyphicon glyphicon-plus"></span>
+                <span class="glyphicon glyphicon-plus"></span>
                 Add Stop Point
             </button>
         </div>;

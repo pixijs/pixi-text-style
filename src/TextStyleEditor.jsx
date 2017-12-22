@@ -78,16 +78,16 @@ export default class TextStyleEditor {
         const codeColor = this.codeColor.bind(this);
 
         return <div oncreate={this.init.bind(this)}>
-            <nav className="controls">
-                <div className="container-fluid">
-                    <h3 className="title">
+            <nav class="controls">
+                <div class="container-fluid">
+                    <h3 class="title">
                         PixiJS TextStyle
-                        <button className="btn btn-primary btn-sm pull-right" onclick={this.reset.bind(this)}>
-                            <span className="glyphicon glyphicon-refresh"></span>
+                        <button class="btn btn-primary btn-sm pull-right" onclick={this.reset.bind(this)}>
+                            <span class="glyphicon glyphicon-refresh"></span>
                         </button>
                     </h3>
                     <Panel id="text" name="Text" selected="true">
-                        <textarea className="form-control"
+                        <textarea class="form-control"
                             id="input"
                             autofocus="true"
                             oninput={m.withAttr('value', this.onText.bind(this))}
@@ -208,52 +208,52 @@ export default class TextStyleEditor {
                     </Panel>
                 </div>
             </nav>
-            <main className="main">
-                <div className="col-sm-12">
+            <main class="main">
+                <div class="col-sm-12">
                     <h3>
-                        <span className="glyphicon glyphicon-eye-open"></span>
+                        <span class="glyphicon glyphicon-eye-open"></span>
                         Preview
                         <small>PixiJS v{PIXI.VERSION}</small>
                     </h3>
-                    <div className="renderer" id="renderer"></div>
+                    <div class="renderer" id="renderer"></div>
                 </div>
-                <div className="col-sm-6">
+                <div class="col-sm-6">
                     <h3>
-                        <span className="glyphicon glyphicon-scissors"></span> JavaScript
+                        <span class="glyphicon glyphicon-scissors"></span> JavaScript
                     </h3>
-                    <pre className="code-display hljs">
-                        <code className="javascript" onupdate={codeColor} oncreate={codeColor} innerHTML={this.getCode()}></code>
+                    <pre class="code-display hljs">
+                        <code class="javascript" onupdate={codeColor} oncreate={codeColor} innerHTML={this.getCode()}></code>
                     </pre>
                 </div>
-                <div className="col-sm-6">
+                <div class="col-sm-6">
                     <h3>
                         <span clasName="glyphicon glyphicon-scissors"></span> JSON
-                        <span className="btn-group pull-right">
-                            <button className="btn btn-primary btn-sm" onclick={this.onSave.bind(this)}>
-                                <span className="glyphicon glyphicon-save"></span> Save
+                        <span class="btn-group pull-right">
+                            <button class="btn btn-primary btn-sm" onclick={this.onSave.bind(this)}>
+                                <span class="glyphicon glyphicon-save"></span> Save
                             </button>
-                            <button className="btn btn-primary btn-sm btn-file">
-                                <span className="glyphicon glyphicon-open"></span>
+                            <button class="btn btn-primary btn-sm btn-file">
+                                <span class="glyphicon glyphicon-open"></span>
                                 <input type="file" onchange={this.onLoad.bind(this)} /> Load
                             </button>
                         </span>
                     </h3>
-                    <pre className="code-display hljs">
-                        <code className="json" onupdate={codeColor} oncreate={codeColor} innerHTML={this.getCode(true)}></code>
+                    <pre class="code-display hljs">
+                        <code class="json" onupdate={codeColor} oncreate={codeColor} innerHTML={this.getCode(true)}></code>
                     </pre>
                 </div>
-                <div className="col-sm-12">
+                <div class="col-sm-12">
                     <h3>
-                        <span className="glyphicon glyphicon-cog"></span> Options
+                        <span class="glyphicon glyphicon-cog"></span> Options
                     </h3>
-                    <div className="well">
-                        <div className="row config">
-                            <label className="col-md-2 col-sm-3">
-                                <span className="glyphicon glyphicon-indent-left"></span>
-                                <span className="name">Indent</span>
+                    <div class="well">
+                        <div class="row config">
+                            <label class="col-md-2 col-sm-3">
+                                <span class="glyphicon glyphicon-indent-left"></span>
+                                <span class="name">Indent</span>
                             </label>
-                            <div className="col-md-10 col-sm-9">
-                                <select className="form-control input-sm" onchange={this.onFormat.bind(this)} value={this.indent}>
+                            <div class="col-md-10 col-sm-9">
+                                <select class="form-control input-sm" onchange={this.onFormat.bind(this)} value={this.indent}>
                                     <option value={TextStyleEditor.INDENT.SPACE_4}>4 Spaces</option>
                                     <option value={TextStyleEditor.INDENT.SPACE_3}>3 Spaces</option>
                                     <option value={TextStyleEditor.INDENT.SPACE_2}>2 Spaces</option>
@@ -263,27 +263,27 @@ export default class TextStyleEditor {
                                 </select>
                             </div>
                         </div>
-                        <div className="row config">
-                            <label className="col-md-2 col-sm-3">
-                                <span className="glyphicon glyphicon-share"></span>
-                                <span className="name">Share</span>
+                        <div class="row config">
+                            <label class="col-md-2 col-sm-3">
+                                <span class="glyphicon glyphicon-share"></span>
+                                <span class="name">Share</span>
                             </label>
-                            <div className="col-md-10 col-sm-9">
-                                <div className="input-group">
-                                    <span className="input-group-btn">
-                                        <button className="btn btn-sm btn-primary" onclick={this.onShorten.bind(this)}>
+                            <div class="col-md-10 col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary" onclick={this.onShorten.bind(this)}>
                                             Shorten URL
                                         </button>
                                     </span>
-                                    <input className="form-control input-sm" type="text" value={this.shortenUrl} />
+                                    <input class="form-control input-sm" type="text" value={this.shortenUrl} />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="col-sm-12">
+                <div class="col-sm-12">
                     <h3>
-                        <span className="glyphicon glyphicon-book"></span> Documentation
+                        <span class="glyphicon glyphicon-book"></span> Documentation
                     </h3>
                     <ul>
                         <li><a href="//pixijs.download/release/docs/PIXI.TextStyle.html">PIXI.TextStyle</a></li>

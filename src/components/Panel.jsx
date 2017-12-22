@@ -19,8 +19,8 @@ export default class Panel {
         const titleClassName = this.selected ? 'expanded': 'collapsed';
         const className = this.selected ? 'pane visible' : 'pane hidden';
         return <div>
-            <h4 className={titleClassName} onclick={this.onclick.bind(this)}>{this.name}</h4>
-            <div className={className}>
+            <h4 class={titleClassName} onclick={this.onclick.bind(this)}>{this.name}</h4>
+            <div class={className}>
                 {vnode.children}
             </div>
         </div>;

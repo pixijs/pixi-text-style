@@ -14,7 +14,7 @@ export default class StyleNumber extends StyleComponent {
         this.max = vnode.attrs.max;
     }
     init() {
-        return <input className="form-control input-sm number"
+        return <input class="form-control input-sm number"
             type="number"
             id={this.id}
             key={this.id}

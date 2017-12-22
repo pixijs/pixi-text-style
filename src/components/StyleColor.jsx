@@ -43,7 +43,7 @@ export default class StyleColor extends StyleComponent {
             this.update(this.hexToString(value));
         });
 
-        return <input className="form-control input-sm color color-group"
+        return <input class="form-control input-sm color color-group"
             type="color"
             id={this.id}
             key={this.id}

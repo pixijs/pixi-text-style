@@ -9,7 +9,7 @@ import m from 'mithril';
 export default class StyleCheckbox extends StyleComponent {
     init() {
         return <input type="checkbox"
-            className="check"
+            class="check"
             id={this.id}
             key={this.id}
             onchange={m.withAttr('checked', this.update, this)}
