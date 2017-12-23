@@ -1,4 +1,5 @@
 import StyleColor from './StyleColor';
+import m from 'mithril';
 
 /**
  * Input number selector
@@ -16,51 +17,56 @@ export default class StyleColorGradient extends StyleColor {
             contents = values.map((color, i) => {
 
                 let buttons = [
-                    m('button.btn.btn-sm.btn-default', {
-                        key: this.id + 'Remove' + i,
-                        onclick: this.removeStop.bind(this, i)
-                    }, m('span.glyphicon.glyphicon-remove'))
+                    <button class='btn btn-sm btn-default'
+                        key={this.id + 'Remove' + i}
+                        onclick={this.removeStop.bind(this, i)}>
+                        <span class='glyphicon glyphicon-remove'></span>
+                    </button>
                 ];
 
                 if (i > 0) {
                     buttons.unshift(
-                        m('button.btn.btn-sm.btn-default', {
-                            key: this.id + 'Up' + i,
-                            onclick: this.moveUpStop.bind(this, i)
-                        }, m('span.glyphicon.glyphicon-arrow-up'))
+                        <button class='btn btn-sm btn-default'
+                            key={this.id + 'Up' + i}
+                            onclick={this.moveUpStop.bind(this, i)}>
+                            <span class='glyphicon glyphicon-arrow-up'></span>
+                        </button>
                     );
                 }
 
                 if (i < values.length - 1) {
+                    const className = `btn btn-sm btn-default ${(i === values.length - 1 ? 'disabled': '')}`;
+
                     buttons.unshift(
-                        m('button.btn.btn-sm.btn-default', {
-                            key: this.id + 'Down' + i,
-                            class: (i === values.length - 1 ? 'disabled': ''),
-                            disabled: i === values.length - 1,
-                            onclick: this.moveDownStop.bind(this, i)
-                        }, m('span.glyphicon.glyphicon-arrow-down'))
+                        <button class={className}
+                            key={this.id + 'Down' + i}
+                            disabled={i === values.length - 1}
+                            onclick={this.moveDownStop.bind(this, i)}>
+                            <span class='glyphicon glyphicon-arrow-down'></span>
+                        </button>
                     );
                 }
 
-                return m('div.input-group.color-group', [
-                    m('input.form-control.input-sm.color[type=color]#' + this.id + i, {
-                        key: this.id + i,
-                        oninput: m.withAttr('value', this.updateIndex.bind(this, i)),
-                        value: this.stringToHex(color)
-                    }),
-                    m('span.input-group-btn', buttons)
-                ]);
+                return <div class='input-group color-group'>
+                    <input class='form-control input-sm color'
+                        type='color'
+                        id={this.id + i}
+                        key={this.id + i}
+                        oninput={m.withAttr('value', this.updateIndex.bind(this, i))}
+                        value={this.stringToHex(color)} />
+                    <span class='input-group-btn'>{buttons}</span>
+                </div>;
             });
         }
-        return m('div.gradient', contents.concat([
-            m('button.btn-block.btn.btn-sm.btn-default', {
-                key: this.id + 'Add',
-                onclick: this.addStop.bind(this)
-            }, [
-                m('span.glyphicon.glyphicon-plus'), ' Add Color'
-            ]
-            )
-        ]));
+        return <div class='gradient'>
+            {contents}
+            <button class='btn-block btn btn-sm btn-default'
+                key={this.id + 'Add'}
+                onclick={this.addStop.bind(this)}>
+                <span class='glyphicon glyphicon-plus'></span>
+                Add Color
+            </button>
+        </div>;
     }
 
     moveUpStop(index) {

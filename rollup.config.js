@@ -1,4 +1,5 @@
 import buble from 'rollup-plugin-buble';
+import resolve from 'rollup-plugin-node-resolve';
 import uglify from 'rollup-plugin-uglify';
 import postcss from 'rollup-plugin-postcss';
 import eslint from 'rollup-plugin-eslint';
@@ -16,20 +17,29 @@ export default {
         sourcemap,
         banner: `/*! PixiJS TextStyle (${compiled}) */`
     },
+    external: ['mithril'],
+    globals: {
+        'mithril': 'm'
+    },
     plugins: [
+        resolve({
+            extensions: ['.js', '.jsx']
+        }),
         copy({
             'src/index.html': 'dist/index.html'
         }),
         eslint({
             throwOnError: true,
-            include: 'src/**.js'
+            include: ['src/**.jsx', 'src/**.js']
         }),
         postcss({
             plugins: [cssnano],
             sourceMap: sourcemap,
             extract: true
         }),
-        buble(),
+        buble({
+            jsx: 'm'
+        }),
         uglify({
             mangle: true,
             compress: true,

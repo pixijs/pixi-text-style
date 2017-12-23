@@ -2,8 +2,12 @@
     "extends": "eslint:recommended",
     "parserOptions": {
         "ecmaVersion": 6,
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
     },
+    "plugins": ["react"],
     "globals": {
         "m": false,
         "PIXI": false,
@@ -52,6 +56,8 @@
         ],
         "no-trailing-spaces": [
             "warn"
-        ]
+        ],
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error" 
     }
 }

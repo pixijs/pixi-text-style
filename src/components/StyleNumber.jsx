@@ -1,4 +1,5 @@
 import StyleComponent from './StyleComponent';
+import m from 'mithril';
 
 /**
  * Input number selector
@@ -13,13 +14,14 @@ export default class StyleNumber extends StyleComponent {
         this.max = vnode.attrs.max;
     }
     init() {
-        return m('input.form-control.input-sm.number[type=number]#'+this.id, {
-            key: this.id,
-            step: this.step,
-            min: this.min,
-            max: this.max,
-            oninput: m.withAttr('value', this.update, this),
-            value: this.parent.style[this.id]
-        });
+        return <input class='form-control input-sm number'
+            type='number'
+            id={this.id}
+            key={this.id}
+            step={this.step}
+            min={this.min}
+            max={this.max}
+            oninput={m.withAttr('value', this.update, this)}
+            value={this.parent.style[this.id]} />;
     }
 }

@@ -1,4 +1,5 @@
 import StyleComponent from './StyleComponent';
+import m from 'mithril';
 
 /**
  * Input number selector
@@ -38,13 +39,16 @@ export default class StyleColor extends StyleComponent {
     }
 
     init() {
-        return m('input.form-control.input-sm.color.color-group[type=color]#'+this.id, {
-            key: this.id,
-            oninput: m.withAttr('value', (value) => {
-                this.update(this.hexToString(value));
-            }),
-            value: this.stringToHex(this.parent.style[this.id])
+        const oninput = m.withAttr('value', (value) => {
+            this.update(this.hexToString(value));
         });
+
+        return <input class='form-control input-sm color color-group'
+            type='color'
+            id={this.id}
+            key={this.id}
+            oninput={oninput}
+            value={this.stringToHex(this.parent.style[this.id])} />;
     }
 
     stringToHex(str) {

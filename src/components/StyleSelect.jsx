@@ -1,4 +1,5 @@
 import StyleComponent from './StyleComponent';
+import m from 'mithril';
 
 /**
  * Select element with options
@@ -14,15 +15,16 @@ export default class StyleSelect extends StyleComponent {
                 name = value[1];
                 value = String(value[0]);
             }
-            return m('option', {value: value}, name);
+            return <option value={value}>{name}</option>;
         });
     }
     init() {
-        return m('select.form-control.input-sm#'+this.id, {
-            key: this.id,
-            oninput: m.withAttr('value', this.update, this),
-            value: this.parent.style[this.id]
-        },
-        this.options);
+        return <select class='form-control input-sm'
+            id={this.id}
+            key={this.key}
+            oninput={m.withAttr('value', this.update, this)}
+            value={this.parent.style[this.id]}>
+            {this.options}
+        </select>;
     }
 }
