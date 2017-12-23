@@ -10,9 +10,9 @@ export default class StyleComponent {
     }
     view() {
         // Wrap around all elements
-        return <div class="row">
-            <label class="col-xs-5" for={this.id} title={this.id}>{this.name}</label>
-            <div class="col-xs-7">{this.init()}</div>
+        return <div class='row'>
+            <label class='col-xs-5' for={this.id} title={this.id}>{this.name}</label>
+            <div class='col-xs-7'>{this.init()}</div>
         </div>;
     }
 

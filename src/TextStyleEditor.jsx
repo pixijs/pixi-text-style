@@ -78,22 +78,22 @@ export default class TextStyleEditor {
         const codeColor = this.codeColor.bind(this);
 
         return <div oncreate={this.init.bind(this)}>
-            <nav class="controls">
-                <div class="container-fluid">
-                    <h3 class="title">
+            <nav class='controls'>
+                <div class='container-fluid'>
+                    <h3 class='title'>
                         PixiJS TextStyle
-                        <button class="btn btn-primary btn-sm pull-right" onclick={this.reset.bind(this)}>
-                            <span class="glyphicon glyphicon-refresh"></span>
+                        <button class='btn btn-primary btn-sm pull-right' onclick={this.reset.bind(this)}>
+                            <span class='glyphicon glyphicon-refresh'></span>
                         </button>
                     </h3>
-                    <Panel id="text" name="Text" selected="true">
-                        <textarea class="form-control"
-                            id="input"
-                            autofocus="true"
+                    <Panel id='text' name='Text' selected='true'>
+                        <textarea class='form-control'
+                            id='input'
+                            autofocus='true'
                             oninput={m.withAttr('value', this.onText.bind(this))}
                             value={this.text.text}></textarea>
                     </Panel>
-                    <Panel id="font" name="Font" selected="true">
+                    <Panel id='font' name='Font' selected='true'>
                         <StyleSelect parent={this} id='fontFamily' name='Font Family' options={[
                             'Arial',
                             'Arial Black',
@@ -146,7 +146,7 @@ export default class TextStyleEditor {
                         ]} />
                     </Panel>
 
-                    <Panel id="fill" name="Fill">
+                    <Panel id='fill' name='Fill'>
                         <StyleColorGradient parent={this} id='fill' name='Color' />
                         <StyleSelect parent={this} id='fillGradientType' name='Gradient Type' options={[
                             [0, 'linear vertical'],
@@ -155,8 +155,8 @@ export default class TextStyleEditor {
                         <StyleStopPoints parent={this} id='fillGradientStops' name='Fill Gradient Stops' step='0.1' min='0' max='1' />
                     </Panel>
 
-                    <Panel id="stroke" name="Stroke">
-                        <StyleColor parent={this} id="stroke" name="Color" />
+                    <Panel id='stroke' name='Stroke'>
+                        <StyleColor parent={this} id='stroke' name='Color' />
                         <StyleNumber parent={this} id='strokeThickness' name='Thickness' step='1' min='0' />
                         <StyleSelect parent={this} id='lineJoin' name='Line Join' options={[
                             'miter',
@@ -166,7 +166,7 @@ export default class TextStyleEditor {
                         <StyleNumber parent={this} id='miterLimit' name='Miter Limit' step='1' min='0' />
                     </Panel>
 
-                    <Panel id="layout" name="Layout">
+                    <Panel id='layout' name='Layout'>
                         <StyleNumber parent={this} id='letterSpacing' name='Letter Spacing' />
                         <StyleSelect parent={this} id='textBaseline' name='Text Baseline' options={[
                             'alphabetic',
@@ -177,18 +177,18 @@ export default class TextStyleEditor {
                         ]} />
                     </Panel>
 
-                    <Panel id="shadow" name="Drop Shadow">
-                        <StyleCheckbox parent={this} id="dropShadow" name="Enable" />
-                        <StyleColor parent={this} id="dropShadowColor" name="Color" />
+                    <Panel id='shadow' name='Drop Shadow'>
+                        <StyleCheckbox parent={this} id='dropShadow' name='Enable' />
+                        <StyleColor parent={this} id='dropShadowColor' name='Color' />
                         <StyleNumber parent={this} id='dropShadowAlpha' name='Alpha' step='0.1' min='0' max='1' />
                         <StyleNumber parent={this} id='dropShadowAngle' name='Angle' step='0.1' />
                         <StyleNumber parent={this} id='dropShadowBlur' name='Blur' />
                         <StyleNumber parent={this} id='dropShadowDistance' name='Distance' />
                     </Panel>
 
-                    <Panel id="multiline" name="Multiline">
-                        <StyleCheckbox parent={this} id="wordWrap" name="Enable" />
-                        <StyleCheckbox parent={this} id="breakWords" name="Break Words" />
+                    <Panel id='multiline' name='Multiline'>
+                        <StyleCheckbox parent={this} id='wordWrap' name='Enable' />
+                        <StyleCheckbox parent={this} id='breakWords' name='Break Words' />
                         <StyleSelect parent={this} id='align' name='Align' options={[
                             'left',
                             'center',
@@ -198,62 +198,62 @@ export default class TextStyleEditor {
                         <StyleNumber parent={this} id='lineHeight' name='Line Height' step='1' min='0' />
                     </Panel>
 
-                    <Panel id="texture" name="Texture">
+                    <Panel id='texture' name='Texture'>
                         <StyleNumber parent={this} id='padding' name='Padding' />
-                        <StyleCheckbox parent={this} id="trim" name="Trim" />
+                        <StyleCheckbox parent={this} id='trim' name='Trim' />
                     </Panel>
 
-                    <Panel id="background" name="Background">
-                        <StyleBackgroundColor parent={this} id="backgroundColor" name="Color" />
+                    <Panel id='background' name='Background'>
+                        <StyleBackgroundColor parent={this} id='backgroundColor' name='Color' />
                     </Panel>
                 </div>
             </nav>
-            <main class="main">
-                <div class="col-sm-12">
+            <main class='main'>
+                <div class='col-sm-12'>
                     <h3>
-                        <span class="glyphicon glyphicon-eye-open"></span>
+                        <span class='glyphicon glyphicon-eye-open'></span>
                         Preview
                         <small>PixiJS v{PIXI.VERSION}</small>
                     </h3>
-                    <div class="renderer" id="renderer"></div>
+                    <div class='renderer' id='renderer'></div>
                 </div>
-                <div class="col-sm-6">
+                <div class='col-sm-6'>
                     <h3>
-                        <span class="glyphicon glyphicon-scissors"></span> JavaScript
+                        <span class='glyphicon glyphicon-scissors'></span> JavaScript
                     </h3>
-                    <pre class="code-display hljs">
-                        <code class="javascript" onupdate={codeColor} oncreate={codeColor} innerHTML={this.getCode()}></code>
+                    <pre class='code-display hljs'>
+                        <code class='javascript' onupdate={codeColor} oncreate={codeColor} innerHTML={this.getCode()}></code>
                     </pre>
                 </div>
-                <div class="col-sm-6">
+                <div class='col-sm-6'>
                     <h3>
-                        <span clasName="glyphicon glyphicon-scissors"></span> JSON
-                        <span class="btn-group pull-right">
-                            <button class="btn btn-primary btn-sm" onclick={this.onSave.bind(this)}>
-                                <span class="glyphicon glyphicon-save"></span> Save
+                        <span clasName='glyphicon glyphicon-scissors'></span> JSON
+                        <span class='btn-group pull-right'>
+                            <button class='btn btn-primary btn-sm' onclick={this.onSave.bind(this)}>
+                                <span class='glyphicon glyphicon-save'></span> Save
                             </button>
-                            <button class="btn btn-primary btn-sm btn-file">
-                                <span class="glyphicon glyphicon-open"></span>
-                                <input type="file" onchange={this.onLoad.bind(this)} /> Load
+                            <button class='btn btn-primary btn-sm btn-file'>
+                                <span class='glyphicon glyphicon-open'></span>
+                                <input type='file' onchange={this.onLoad.bind(this)} /> Load
                             </button>
                         </span>
                     </h3>
-                    <pre class="code-display hljs">
-                        <code class="json" onupdate={codeColor} oncreate={codeColor} innerHTML={this.getCode(true)}></code>
+                    <pre class='code-display hljs'>
+                        <code class='json' onupdate={codeColor} oncreate={codeColor} innerHTML={this.getCode(true)}></code>
                     </pre>
                 </div>
-                <div class="col-sm-12">
+                <div class='col-sm-12'>
                     <h3>
-                        <span class="glyphicon glyphicon-cog"></span> Options
+                        <span class='glyphicon glyphicon-cog'></span> Options
                     </h3>
-                    <div class="well">
-                        <div class="row config">
-                            <label class="col-md-2 col-sm-3">
-                                <span class="glyphicon glyphicon-indent-left"></span>
-                                <span class="name">Indent</span>
+                    <div class='well'>
+                        <div class='row config'>
+                            <label class='col-md-2 col-sm-3'>
+                                <span class='glyphicon glyphicon-indent-left'></span>
+                                <span class='name'>Indent</span>
                             </label>
-                            <div class="col-md-10 col-sm-9">
-                                <select class="form-control input-sm" onchange={this.onFormat.bind(this)} value={this.indent}>
+                            <div class='col-md-10 col-sm-9'>
+                                <select class='form-control input-sm' onchange={this.onFormat.bind(this)} value={this.indent}>
                                     <option value={TextStyleEditor.INDENT.SPACE_4}>4 Spaces</option>
                                     <option value={TextStyleEditor.INDENT.SPACE_3}>3 Spaces</option>
                                     <option value={TextStyleEditor.INDENT.SPACE_2}>2 Spaces</option>
@@ -263,32 +263,32 @@ export default class TextStyleEditor {
                                 </select>
                             </div>
                         </div>
-                        <div class="row config">
-                            <label class="col-md-2 col-sm-3">
-                                <span class="glyphicon glyphicon-share"></span>
-                                <span class="name">Share</span>
+                        <div class='row config'>
+                            <label class='col-md-2 col-sm-3'>
+                                <span class='glyphicon glyphicon-share'></span>
+                                <span class='name'>Share</span>
                             </label>
-                            <div class="col-md-10 col-sm-9">
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary" onclick={this.onShorten.bind(this)}>
+                            <div class='col-md-10 col-sm-9'>
+                                <div class='input-group'>
+                                    <span class='input-group-btn'>
+                                        <button class='btn btn-sm btn-primary' onclick={this.onShorten.bind(this)}>
                                             Shorten URL
                                         </button>
                                     </span>
-                                    <input class="form-control input-sm" type="text" value={this.shortenUrl} />
+                                    <input class='form-control input-sm' type='text' value={this.shortenUrl} />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12">
+                <div class='col-sm-12'>
                     <h3>
-                        <span class="glyphicon glyphicon-book"></span> Documentation
+                        <span class='glyphicon glyphicon-book'></span> Documentation
                     </h3>
                     <ul>
-                        <li><a href="//pixijs.download/release/docs/PIXI.TextStyle.html">PIXI.TextStyle</a></li>
-                        <li><a href="//pixijs.download/release/docs/PIXI.Text.html">PIXI.Text</a></li>
-                        <li><a href="//pixijs.download/release/docs/PIXI.TextMetrics.html">PIXI.TextMetrics</a></li>
+                        <li><a href='//pixijs.download/release/docs/PIXI.TextStyle.html'>PIXI.TextStyle</a></li>
+                        <li><a href='//pixijs.download/release/docs/PIXI.Text.html'>PIXI.Text</a></li>
+                        <li><a href='//pixijs.download/release/docs/PIXI.TextMetrics.html'>PIXI.TextMetrics</a></li>
                     </ul>
                 </div>
             </main>

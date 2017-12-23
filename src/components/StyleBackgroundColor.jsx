@@ -12,8 +12,8 @@ export default class StyleBackgroundColor extends StyleComponent {
             this.parent.background = value;
             this.parent.app.render();
         });
-        return <input class="form-control input-sm color"
-            type="color"
+        return <input class='form-control input-sm color'
+            type='color'
             id={this.id}
             key={this.id}
             value={this.parent.background}

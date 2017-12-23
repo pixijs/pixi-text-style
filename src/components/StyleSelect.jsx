@@ -19,7 +19,7 @@ export default class StyleSelect extends StyleComponent {
         });
     }
     init() {
-        return <select class="form-control input-sm"
+        return <select class='form-control input-sm'
             id={this.id}
             key={this.key}
             oninput={m.withAttr('value', this.update, this)}
