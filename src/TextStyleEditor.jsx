@@ -194,6 +194,11 @@ export default class TextStyleEditor {
                             'center',
                             'right'
                         ]} />
+                        <StyleSelect parent={this} id='whiteSpace' name='White Space' options={[
+                            'normal',
+                            'pre',
+                            'pre-line'
+                        ]} />
                         <StyleNumber parent={this} id='wordWrapWidth' name='Wrap Width' step='10' min='0' />
                         <StyleNumber parent={this} id='lineHeight' name='Line Height' step='1' min='0' />
                     </Panel>
