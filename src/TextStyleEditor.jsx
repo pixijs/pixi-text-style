@@ -184,6 +184,12 @@ export default class TextStyleEditor {
                         <StyleNumber parent={this} id='dropShadowAngle' name='Angle' step='0.1' />
                         <StyleNumber parent={this} id='dropShadowBlur' name='Blur' />
                         <StyleNumber parent={this} id='dropShadowDistance' name='Distance' />
+
+                        <StyleSelect parent={this} id='dropShadowLocation' name='Location' options={[
+                            [0, 'Fill'],
+                            [1, 'Stroke'],
+                            [2, 'Both']
+                        ]} />
                     </Panel>
 
                     <Panel id='multiline' name='Multiline'>
