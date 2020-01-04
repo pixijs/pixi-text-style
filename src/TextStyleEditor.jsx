@@ -380,7 +380,7 @@ export default class TextStyleEditor {
 
     backgroundSnap(w,h){
         const bg = new PIXI.Graphics();
-        bg.beginFill(+('0x'+this.defaultBG.split('#')[1]));
+        bg.beginFill(+('0x'+this.background.split('#')[1]));
         bg.drawRect(0, 0, w, h).endFill();
         return new PIXI.Sprite(this.app.renderer.generateTexture(bg));
     }
