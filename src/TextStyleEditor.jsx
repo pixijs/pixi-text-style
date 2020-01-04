@@ -85,6 +85,9 @@ export default class TextStyleEditor {
                         <button class='btn btn-primary btn-sm pull-right' onclick={this.reset.bind(this)}>
                             <span class='glyphicon glyphicon-refresh'></span>
                         </button>
+                        <button class='btn btn-primary btn-sm pull-right' onclick={this.saveSnap.bind(this)}>
+                            <span class='glyphicon glyphicon-camera'></span>
+                        </button>
                     </h3>
                     <Panel id='text' name='Text' selected='true'>
                         <textarea class='form-control'
@@ -373,6 +376,31 @@ export default class TextStyleEditor {
         this.background = this.defaultBG;
         m.redraw();
         this.app.render();
+    }
+
+    backgroundSnap(w,h){
+        const bg = new PIXI.Graphics();
+        bg.beginFill(+('0x'+this.defaultBG.split('#')[1]));
+        bg.drawRect(0, 0, w, h).endFill();
+        return new PIXI.Sprite(this.app.renderer.generateTexture(bg));
+    }
+
+    saveSnap() {
+        this.app.start();
+        const txt = new PIXI.Text(this.text._text, this.style);
+        const bg = this.backgroundSnap(txt.width,txt.height);
+        txt.anchor.set(0.5);
+        bg.anchor.set(0.5);
+        bg.addChild(txt);
+        const spriteTxt = new PIXI.Sprite(this.app.renderer.generateTexture(bg));
+        this.app.renderer.extract.canvas(spriteTxt).toBlob(function(blob){
+            const _URL = window.URL || window.webkitURL || URL;
+            const a = document.createElement('a');
+            a.href = _URL.createObjectURL(blob);
+            a.download = txt.text + '.jpg';
+            document.body.append(a);
+            a.click() && a.remove();
+        }, 'image/jpg',0.65);
     }
 
     set background(color) {
