@@ -384,9 +384,12 @@ export default class TextStyleEditor {
         if(this._busy) {
             return;
         }
+        const alpha = prompt('Background Alpha', sessionStorage.getItem('snapAlpha')||'1');
+        if(alpha===null || !isFinite(alpha)) {
+            return;
+        }
         this._busy = true;
-        const alpha = +prompt('Background Alpha', sessionStorage.getItem('snapAlpha')||'1');
-        sessionStorage.setItem('snapAlpha', String(alpha));
+        sessionStorage.setItem('snapAlpha', alpha);
 
         const Container = new PIXI.Container();
         const Background = new PIXI.Sprite(PIXI.Texture.WHITE);
@@ -394,7 +397,7 @@ export default class TextStyleEditor {
         Background.anchor.set(0.5);
         Background.scale.set(Text.width/Background.width, Text.height/Background.height);
         Background.tint = +('0x'+this.background.split('#')[1]);
-        Background.alpha = alpha;
+        Background.alpha = +alpha;
         Text.anchor.set(0.5);
         Container.addChild(Background,Text);
 
