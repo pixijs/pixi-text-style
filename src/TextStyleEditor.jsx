@@ -94,6 +94,14 @@ export default class TextStyleEditor {
                             value={this.text.text}></textarea>
                     </Panel>
                     <Panel id='font' name='Font' selected='true'>
+                        <button class='btn btn-outline-dark btn-file btnFont'>
+                            <span class='glyphicon glyphicon-open'></span>
+                            <input type='file' onchange={this.onLoadFont.bind(this)} /> Add
+                        </button>
+                        <button class='btn btn-outline-dark btn-file btnFont'>
+                            <span class='glyphicon glyphicon-erase'></span>
+                            <input type='file' onchange={this.onLoadFont.bind(this)} /> Clear
+                        </button>
                         <StyleSelect parent={this} id='fontFamily' name='Font Family' options={[
                             'Arial',
                             'Arial Black',
@@ -304,6 +312,30 @@ export default class TextStyleEditor {
         this.indent = parseInt(element.target.value);
         localStorage.indent = this.indent;
         m.redraw();
+    }
+
+    onLoadFont(event) {
+        const input = event.target;
+        const file = input.files[0];
+        const name = file.name.split('.ttf')[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const font = new FontFace(name, 'url('+e.target.result+')',{ style: 'normal', weight: 700 }); //"url('" + url + fontType + "')")
+            document.fonts.ready.then(()=>{
+                const el = document.getElementById('fontFamily');
+                const o = document.createElement('option');
+                o.text = name;
+                o.value = name;
+                el.add(o);
+                m.redraw();
+                this.app.render();
+            });
+            font.load().then(function(loadedFontFace) {
+                document.fonts.add(loadedFontFace);
+            });
+        };
+        reader.readAsDataURL(file);
+        event.target.value = '';
     }
 
     onLoad(event) {

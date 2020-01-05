@@ -183,6 +183,14 @@ h3 {
     display: block;
 }
 
+.btnFont {
+    font-size: 10px;
+    line-height: 0;
+    border-radius: 2px;
+    padding: 4px 4px;
+    margin-right: 4px;
+}
+
 @media (max-width: 760px) {
     .controls {
         width: 260px;
