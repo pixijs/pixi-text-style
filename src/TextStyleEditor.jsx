@@ -377,27 +377,22 @@ export default class TextStyleEditor {
         m.redraw();
         this.app.render();
     }
-
-    backgroundSnap(w,h){
-        const bg = new PIXI.Graphics();
-        bg.beginFill(+('0x'+this.background.split('#')[1]));
-        bg.drawRect(0, 0, w, h).endFill();
-        return new PIXI.Sprite(this.app.renderer.generateTexture(bg));
-    }
-
     saveSnap() {
-        this.app.start();
-        const txt = new PIXI.Text(this.text._text, this.style);
-        const bg = this.backgroundSnap(txt.width,txt.height);
-        txt.anchor.set(0.5);
-        bg.anchor.set(0.5);
-        bg.addChild(txt);
-        const spriteTxt = new PIXI.Sprite(this.app.renderer.generateTexture(bg));
-        this.app.renderer.extract.canvas(spriteTxt).toBlob(function(blob){
+        const Container = new PIXI.Container();
+        const Background = new PIXI.Sprite(PIXI.Texture.WHITE);
+        const Text = new PIXI.Text(this.text._text, this.style);
+        Background.anchor.set(0.5);
+        Background.scale.set(Text.width/Background.width, Text.height/Background.height);
+        Background.tint = +('0x'+this.background.split('#')[1]);
+        Text.anchor.set(0.5);
+        Container.addChild(Background,Text);
+
+        const SnapSprite = new PIXI.Sprite(this.app.renderer.generateTexture(Container));
+        this.app.renderer.extract.canvas(SnapSprite).toBlob(function(blob){
             const _URL = window.URL || window.webkitURL || URL;
             const a = document.createElement('a');
             a.href = _URL.createObjectURL(blob);
-            a.download = txt.text + '.jpg';
+            a.download = Text.text + '.jpg';
             document.body.append(a);
             a.click() && a.remove();
         }, 'image/jpg',0.65);
