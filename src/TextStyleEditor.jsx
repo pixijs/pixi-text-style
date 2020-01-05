@@ -377,13 +377,18 @@ export default class TextStyleEditor {
         m.redraw();
         this.app.render();
     }
+
     saveSnap() {
+        const alpha = +prompt('Background Alpha', sessionStorage.getItem('snapAlpha')||'1');
+        sessionStorage.setItem('snapAlpha', String(alpha));
+
         const Container = new PIXI.Container();
         const Background = new PIXI.Sprite(PIXI.Texture.WHITE);
         const Text = new PIXI.Text(this.text._text, this.style);
         Background.anchor.set(0.5);
         Background.scale.set(Text.width/Background.width, Text.height/Background.height);
         Background.tint = +('0x'+this.background.split('#')[1]);
+        Background.alpha = alpha;
         Text.anchor.set(0.5);
         Container.addChild(Background,Text);
 
@@ -392,10 +397,13 @@ export default class TextStyleEditor {
             const _URL = window.URL || window.webkitURL || URL;
             const a = document.createElement('a');
             a.href = _URL.createObjectURL(blob);
-            a.download = Text.text.substring(0, 24) + '.jpg';
+            a.download = Text.text.substring(0, 24) + '.png';
             document.body.append(a);
-            a.click() && a.remove();
-        }, 'image/jpg',0.65);
+            a.click();
+            a.remove();
+            Container.destroy({children:true});
+            PIXI.utils.clearTextureCache();
+        }, 'image/png');
     }
 
     set background(color) {
