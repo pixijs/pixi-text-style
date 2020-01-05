@@ -392,7 +392,7 @@ export default class TextStyleEditor {
             const _URL = window.URL || window.webkitURL || URL;
             const a = document.createElement('a');
             a.href = _URL.createObjectURL(blob);
-            a.download = Text.text + '.jpg';
+            a.download = Text.text.substring(0, 24) + '.jpg';
             document.body.append(a);
             a.click() && a.remove();
         }, 'image/jpg',0.65);
