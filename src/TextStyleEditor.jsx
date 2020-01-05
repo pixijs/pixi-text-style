@@ -408,6 +408,7 @@ export default class TextStyleEditor {
             a.click();
             a.remove();
             Container.destroy({children:true});
+            SnapSprite.destroy();
             PIXI.utils.clearTextureCache();
             this._busy = false;
         }, 'image/png');
