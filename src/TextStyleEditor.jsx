@@ -36,6 +36,8 @@ export default class TextStyleEditor {
         // Placeholder for URL
         this.shortenUrl = '';
 
+        // ugly prevent double click for saveSnap toBlob
+        this._busy = false;
         // Restore the values or get the defaults
         let values = {
             text: localStorage.text || this.defaultText,
@@ -379,6 +381,10 @@ export default class TextStyleEditor {
     }
 
     saveSnap() {
+        if(this._busy) {
+            return;
+        }
+        this._busy = true;
         const alpha = +prompt('Background Alpha', sessionStorage.getItem('snapAlpha')||'1');
         sessionStorage.setItem('snapAlpha', String(alpha));
 
@@ -393,7 +399,7 @@ export default class TextStyleEditor {
         Container.addChild(Background,Text);
 
         const SnapSprite = new PIXI.Sprite(this.app.renderer.generateTexture(Container));
-        this.app.renderer.extract.canvas(SnapSprite).toBlob(function(blob){
+        this.app.renderer.extract.canvas(SnapSprite).toBlob((blob)=>{
             const _URL = window.URL || window.webkitURL || URL;
             const a = document.createElement('a');
             a.href = _URL.createObjectURL(blob);
@@ -403,6 +409,7 @@ export default class TextStyleEditor {
             a.remove();
             Container.destroy({children:true});
             PIXI.utils.clearTextureCache();
+            this._busy = false;
         }, 'image/png');
     }
 
