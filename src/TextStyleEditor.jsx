@@ -5,6 +5,8 @@ import StyleColorGradient from './components/StyleColorGradient';
 import StyleNumber from './components/StyleNumber';
 import StyleSelect from './components/StyleSelect';
 import StyleStopPoints from './components/StyleStopPoints';
+import FontsLoader from './components/FontsLoader';
+import Translate from './components/TranslateLabel';
 import Panel from './components/Panel';
 import { deepCopy, deepEqual } from './utils';
 import m from 'mithril';
@@ -21,6 +23,8 @@ export default class TextStyleEditor {
         this.defaultText = 'Hello World';
         this.defaultBG = '#ffffff';
         this.style = new PIXI.TextStyle();
+        this.FontsLoader = new FontsLoader(this);
+        this.Translate = new Translate(this);
 
         // The default dropShadowColor is "#000000",
         // this makes it consistent with fill, strokeFill, etc
@@ -56,13 +60,6 @@ export default class TextStyleEditor {
             }
         }
 
-        const storageFonts = Object.keys(localStorage).filter(k=>k.indexOf('lf_')>-1);
-        for (let i = 0, l = storageFonts.length; i < l; i++) {
-            const name = storageFonts[i].split('lf_')[1];
-            const hashBase64 = localStorage.getItem(name);
-            this.addFont(name, hashBase64);
-        }
-
         PIXI.utils.skipHello();
         this.app = new PIXI.Application({
             width: 400,
@@ -83,7 +80,6 @@ export default class TextStyleEditor {
 
     view() {
         const codeColor = this.codeColor.bind(this);
-
         return <div oncreate={this.init.bind(this)}>
             <nav class='controls'>
                 <div class='container-fluid'>
@@ -94,22 +90,7 @@ export default class TextStyleEditor {
                         </button>
                     </h3>
                     <Panel id='text' name='Text' selected='true'>
-                        <button title='China' class='btn btn-outline-dark btn-file btnTran' onclick={this.translate.bind(this,'zh')}>zh
-                        </button>
-                        <button title='English' class='btn btn-outline-dark btn-file btnTran' onclick={this.translate.bind(this,'en')}>en
-                        </button>
-                        <button title='Russian' class='btn btn-outline-dark btn-file btnTran' onclick={this.translate.bind(this,'ru')}>ru
-                        </button>
-                        <button title='Japanese' class='btn btn-outline-dark btn-file btnTran' onclick={this.translate.bind(this,'ja')}>ja
-                        </button>
-                        <button title='Thai' class='btn btn-outline-dark btn-file btnTran' onclick={this.translate.bind(this,'th')}>th
-                        </button>
-                        <button title='Portuguese' class='btn btn-outline-dark btn-file btnTran' onclick={this.translate.bind(this,'pt')}>pt
-                        </button>
-                        <button title='Arabic' class='btn btn-outline-dark btn-file btnTran' onclick={this.translate.bind(this,'ar')}>ar
-                        </button>
-                        <button title='Czech' class='btn btn-outline-dark btn-file btnTran' onclick={this.translate.bind(this,'cs')}>cs
-                        </button>
+                        {this.Translate.view(this)}
                         <textarea class='form-control'npm run-script build
                             id='input'
                             autofocus='true'
@@ -117,13 +98,7 @@ export default class TextStyleEditor {
                             value={this.text.text}></textarea>
                     </Panel>
                     <Panel id='font' name='Font' selected='true'>
-                        <button title='Add local custom fonts' class='btn btn-outline-dark btn-file btnFont'>
-                            <span class='glyphicon glyphicon-open'></span>
-                            <input type='file' onchange={this.onLoadFont.bind(this)} /> Add
-                        </button>
-                        <button title='Clear all customs fonts' class='btn btn-outline-dark btn-file btnFont' onclick={this.clearFonts.bind(this)}>Clear
-                            <span class='glyphicon glyphicon-erase'></span>
-                        </button>
+                        {this.FontsLoader.view(this)}
                         <StyleSelect parent={this} id='fontFamily' name='Font Family' options={[
                             'Arial',
                             'Arial Black',
@@ -334,77 +309,6 @@ export default class TextStyleEditor {
         this.indent = parseInt(element.target.value);
         localStorage.indent = this.indent;
         m.redraw();
-    }
-
-    translate(lanKey){
-        if(this._busy){
-            return;
-        }
-        this._busy = true;
-        const url = 'https://translate.yandex.net/api/v1.5/tr.json/translate';
-        const keyAPI = 'trnsl.1.1.20200105T231430Z.d549b6f7b6103206.2c4b8c1983761519c17632b7f640a0ccbdeb2349';
-        const xhr = new XMLHttpRequest();
-        const textAPI = localStorage.getItem('text') || this.text.text;
-        const langAPI = lanKey;
-        const data = 'key='+keyAPI+'&text='+textAPI.substring(0, 16)+'&lang='+langAPI;
-        xhr.open('POST',url,true);
-        xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhr.send(data);
-        xhr.onreadystatechange = ()=>{
-            if (xhr.readyState===4 && xhr.status===200) {
-                const res = xhr.responseText;
-                const json = JSON.parse(res);
-                if(json.code === 200) {
-                    this.text.text = json.text[0];
-                }
-                else {
-                    this.text.text = 'Error Code: ' + json.code;
-                }
-                m.redraw();
-                this.app.render();
-                this._busy = false;
-            }
-        };
-    }
-
-    onLoadFont(event) {
-        const input = event.target;
-        const file = input.files[0];
-        const name = file.name.split('.')[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            localStorage.setItem('lf_'+name, e.target.result);
-            this.addFont(name,e.target.result);
-        };
-        reader.readAsDataURL(file);
-        event.target.value = '';
-    }
-
-    addFont(name,hashBase64){
-        const font = new FontFace(name, 'url('+hashBase64+')',{ style: 'normal', weight: 700 });
-        document.fonts.clear();
-        font.load().then((loadedFontFace) => {
-            document.fonts.add(loadedFontFace);
-            const el = document.getElementById('fontFamily');
-            const o = document.createElement('option');
-            o.text = name;
-            o.value = name;
-            el.add(o);
-            this.style.fontFamily = name;
-            m.redraw();
-            this.app.render();
-        });
-    }
-
-    clearFonts(){
-        const storageFonts = Object.keys(localStorage).filter(k=>k.indexOf('lf_')>-1);
-        for (let i = 0, l = storageFonts.length; i < l; i++) {
-            const name = storageFonts[i];
-            localStorage.removeItem(name);
-        }
-        this.style.fontFamily = 'Arial';
-        m.redraw();
-        location.reload();
     }
 
     onLoad(event) {

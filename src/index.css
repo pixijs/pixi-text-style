@@ -202,6 +202,10 @@ h3 {
     background-color: #14171d;
 }
 
+.fontLoader{
+    min-height: 0px !important;
+}
+
 @media (max-width: 760px) {
     .controls {
         width: 260px;
