@@ -26,10 +26,10 @@ export default class FontsLoader {
     /** Wehn page load, get all cache fonts base64 from localStorage*/
     initialize (){
         // note: LocalFonts stored with prefixe `lf_`
-        const storageFonts = Object.keys(localStorage).filter(k=>k.indexOf('lf_')>-1);
-        for (let i = 0, l = storageFonts.length; i < l; i++) {
-            const name = storageFonts[i].split('lf_')[1];
-            const hashBase64 = localStorage.getItem(name);
+        const storageFontsName = Object.keys(localStorage).filter(k=>k.indexOf('lf_')>-1);
+        for (let i = 0, l = storageFontsName.length; i < l; i++) {
+            const name = storageFontsName[i].split('lf_')[1];
+            const hashBase64 = localStorage.getItem(storageFontsName[i]);
             this.addFont(name, hashBase64);
         }
     }
