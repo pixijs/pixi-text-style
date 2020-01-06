@@ -58,7 +58,7 @@ export default class TextStyleEditor {
 
         const storageFonts = Object.keys(localStorage).filter(k=>k.indexOf('lf_')>-1);
         for (let i = 0, l = storageFonts.length; i < l; i++) {
-            const name = storageFonts[i];
+            const name = storageFonts[i].split('lf_')[1];
             const hashBase64 = localStorage.getItem(name);
             this.addFont(name, hashBase64);
         }
@@ -117,11 +117,11 @@ export default class TextStyleEditor {
                             value={this.text.text}></textarea>
                     </Panel>
                     <Panel id='font' name='Font' selected='true'>
-                        <button class='btn btn-outline-dark btn-file btnFont'>
+                        <button title='Add local custom fonts' class='btn btn-outline-dark btn-file btnFont'>
                             <span class='glyphicon glyphicon-open'></span>
                             <input type='file' onchange={this.onLoadFont.bind(this)} /> Add
                         </button>
-                        <button class='btn btn-outline-dark btn-file btnFont' onclick={this.clearFonts.bind(this)}>Clear
+                        <button title='Clear all customs fonts' class='btn btn-outline-dark btn-file btnFont' onclick={this.clearFonts.bind(this)}>Clear
                             <span class='glyphicon glyphicon-erase'></span>
                         </button>
                         <StyleSelect parent={this} id='fontFamily' name='Font Family' options={[
@@ -370,7 +370,7 @@ export default class TextStyleEditor {
     onLoadFont(event) {
         const input = event.target;
         const file = input.files[0];
-        const name = file.name.split('.ttf')[0];
+        const name = file.name.split('.')[0];
         const reader = new FileReader();
         reader.onload = (e) => {
             localStorage.setItem('lf_'+name, e.target.result);
@@ -384,7 +384,6 @@ export default class TextStyleEditor {
         const font = new FontFace(name, 'url('+hashBase64+')',{ style: 'normal', weight: 700 });
         document.fonts.clear();
         font.load().then((loadedFontFace) => {
-            console.log(0);
             document.fonts.add(loadedFontFace);
             const el = document.getElementById('fontFamily');
             const o = document.createElement('option');
