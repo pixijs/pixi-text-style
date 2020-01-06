@@ -5,6 +5,7 @@ import StyleColorGradient from './components/StyleColorGradient';
 import StyleNumber from './components/StyleNumber';
 import StyleSelect from './components/StyleSelect';
 import StyleStopPoints from './components/StyleStopPoints';
+import SnapDialog from './components/SnapDialog';
 import Panel from './components/Panel';
 import { deepCopy, deepEqual } from './utils';
 import m from 'mithril';
@@ -36,8 +37,9 @@ export default class TextStyleEditor {
         // Placeholder for URL
         this.shortenUrl = '';
 
-        // ugly prevent double click for saveSnap toBlob
-        this._busy = false;
+        // snap options are visible
+        this._snapOptions = !!localStorage.snapOptions;
+
         // Restore the values or get the defaults
         let values = {
             text: localStorage.text || this.defaultText,
@@ -86,9 +88,6 @@ export default class TextStyleEditor {
                         PixiJS TextStyle
                         <button class='btn btn-primary btn-sm pull-right' onclick={this.reset.bind(this)}>
                             <span class='glyphicon glyphicon-refresh'></span>
-                        </button>
-                        <button class='btn btn-primary btn-sm pull-right' onclick={this.saveSnap.bind(this)}>
-                            <span class='glyphicon glyphicon-camera'></span>
                         </button>
                     </h3>
                     <Panel id='text' name='Text' selected='true'>
@@ -221,11 +220,15 @@ export default class TextStyleEditor {
             <main class='main'>
                 <div class='col-sm-12'>
                     <h3>
+                        <button class='btn btn-primary btn-sm pull-right' onclick={this.onSnapToggle.bind(this)}>
+                            <span class='glyphicon glyphicon-camera'></span> Snapshot
+                        </button>
                         <span class='glyphicon glyphicon-eye-open'></span>
                         Preview
                         <small>PixiJS v{PIXI.VERSION}</small>
                     </h3>
                     <div class='renderer' id='renderer'></div>
+                    { this._snapOptions && <SnapDialog onclose={this.onSnapToggle.bind(this)} parent={this} /> }
                 </div>
                 <div class='col-sm-6'>
                     <h3>
@@ -380,41 +383,15 @@ export default class TextStyleEditor {
         this.app.render();
     }
 
-    saveSnap() {
-        if(this._busy) {
-            return;
+    onSnapToggle() {
+        this._snapOptions = !this._snapOptions;
+        if (!this._snapOptions) {
+            localStorage.removeItem('snapOptions');
         }
-        const alpha = prompt('Background Alpha', sessionStorage.getItem('snapAlpha')||'1');
-        if(alpha===null || !isFinite(alpha)) {
-            return;
+        else {
+            localStorage.setItem('snapOptions', '1');
         }
-        this._busy = true;
-        sessionStorage.setItem('snapAlpha', alpha);
-
-        const Container = new PIXI.Container();
-        const Background = new PIXI.Sprite(PIXI.Texture.WHITE);
-        const Text = new PIXI.Text(this.text._text, this.style);
-        Background.anchor.set(0.5);
-        Background.scale.set(Text.width/Background.width, Text.height/Background.height);
-        Background.tint = +('0x'+this.background.split('#')[1]);
-        Background.alpha = +alpha;
-        Text.anchor.set(0.5);
-        Container.addChild(Background,Text);
-
-        const SnapSprite = new PIXI.Sprite(this.app.renderer.generateTexture(Container));
-        this.app.renderer.extract.canvas(SnapSprite).toBlob((blob)=>{
-            const _URL = window.URL || window.webkitURL || URL;
-            const a = document.createElement('a');
-            a.href = _URL.createObjectURL(blob);
-            a.download = Text.text.substring(0, 24) + '.png';
-            document.body.append(a);
-            a.click();
-            a.remove();
-            Container.destroy({children:true});
-            SnapSprite.destroy();
-            PIXI.utils.clearTextureCache();
-            this._busy = false;
-        }, 'image/png');
+        m.redraw();
     }
 
     set background(color) {
