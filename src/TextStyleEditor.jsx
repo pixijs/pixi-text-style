@@ -58,10 +58,10 @@ export default class TextStyleEditor {
         }
 
         PIXI.utils.skipHello();
+        PIXI.settings.ROUND_PIXELS = true;
         this.app = new PIXI.Application({
             width: 400,
             height: 100,
-            roundPixels: true,
             resolution: devicePixelRatio
         });
         this.app.renderer.plugins.interaction.autoPreventDefault = false;
