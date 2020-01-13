@@ -34,7 +34,7 @@ export default class SnapDialog {
 
         const renderTexture = app.renderer.generateTexture(preview);
         preview.destroy(true);
-        
+
         const snap = new PIXI.Sprite(renderTexture);
 
         app.renderer.extract.canvas(snap).toBlob((blob) => {
