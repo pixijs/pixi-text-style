@@ -183,27 +183,16 @@ h3 {
     display: block;
 }
 
-.btnFont {
-    font-size: 10px;
-    line-height: 0;
-    border-radius: 2px;
-    padding: 4px 4px;
-    margin-right: 4px;
-    background-color: #14171d;
+.btn-group-full {
+    display: flex;
 }
 
-.btnTran {
-    font-size: 12px;
-    line-height: 0.4;
-    border-radius: 2px;
-    padding: 6px;
-    margin-right: 4px;
-    color: #9e3960;
-    background-color: #14171d;
+.btn-group-full .btn {
+    width:100%;
 }
 
-.fontLoader{
-    min-height: 0px !important;
+.font-loader {
+    min-height:30px !important;
 }
 
 @media (max-width: 760px) {

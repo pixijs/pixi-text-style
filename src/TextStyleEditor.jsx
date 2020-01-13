@@ -6,7 +6,6 @@ import StyleNumber from './components/StyleNumber';
 import StyleSelect from './components/StyleSelect';
 import StyleStopPoints from './components/StyleStopPoints';
 import FontsLoader from './components/FontsLoader';
-import Translate from './components/TranslateLabel';
 import Panel from './components/Panel';
 import { deepCopy, deepEqual } from './utils';
 import m from 'mithril';
@@ -23,8 +22,6 @@ export default class TextStyleEditor {
         this.defaultText = 'Hello World';
         this.defaultBG = '#ffffff';
         this.style = new PIXI.TextStyle();
-        this.FontsLoader = new FontsLoader(this);
-        this.Translate = new Translate(this);
 
         // The default dropShadowColor is "#000000",
         // this makes it consistent with fill, strokeFill, etc
@@ -61,10 +58,10 @@ export default class TextStyleEditor {
         }
 
         PIXI.utils.skipHello();
+        PIXI.settings.ROUND_PIXELS = true;
         this.app = new PIXI.Application({
             width: 400,
             height: 100,
-            roundPixels: true,
             resolution: devicePixelRatio
         });
         this.app.renderer.plugins.interaction.autoPreventDefault = false;
@@ -90,7 +87,6 @@ export default class TextStyleEditor {
                         </button>
                     </h3>
                     <Panel id='text' name='Text' selected='true'>
-                        {this.Translate.view(this)}
                         <textarea class='form-control'npm run-script build
                             id='input'
                             autofocus='true'
@@ -98,7 +94,6 @@ export default class TextStyleEditor {
                             value={this.text.text}></textarea>
                     </Panel>
                     <Panel id='font' name='Font' selected='true'>
-                        {this.FontsLoader.view(this)}
                         <StyleSelect parent={this} id='fontFamily' name='Font Family' options={[
                             'Arial',
                             'Arial Black',
@@ -124,6 +119,7 @@ export default class TextStyleEditor {
                             '"Courier New", Courier, monospace',
                             '"Lucida Console", Monaco, monospace'
                         ]} />
+                        <FontsLoader onrender={() => this.app.render()} style={this.style} />
                         <StyleNumber parent={this} id='fontSize' name='Font Size' step='1' min='1' />
                         <StyleSelect parent={this} id='fontStyle' name='Font Style' options={[
                             'normal',
