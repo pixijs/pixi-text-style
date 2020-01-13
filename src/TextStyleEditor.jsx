@@ -88,7 +88,7 @@ export default class TextStyleEditor {
                         </button>
                     </h3>
                     <Panel id='text' name='Text' selected='true'>
-                        <textarea class='form-control'npm run-script build
+                        <textarea class='form-control'
                             id='input'
                             autofocus='true'
                             oninput={m.withAttr('value', this.onText.bind(this))}
