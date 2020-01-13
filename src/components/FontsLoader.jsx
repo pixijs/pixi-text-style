@@ -10,6 +10,11 @@ export default class FontsLoader {
         return 'lf_';
     }
 
+    /** default font */
+    static get DEFAULT() {
+        return 'Arial';
+    }
+
     /** @param {m.Vnode} vnode*/
     constructor(vnode) {
         /**@type {Boolean} - prevent double click when loadind fonts */
@@ -21,13 +26,12 @@ export default class FontsLoader {
 
     /** When page load, get all cache fonts base64 from localStorage */
     initialize (){
-        const storageFontsName = Object.keys(localStorage)
-            .filter(k=>k.indexOf(FontsLoader.PREFIX)>-1);
-        for (let i = 0, l = storageFontsName.length; i < l; i++) {
-            const name = storageFontsName[i].split(FontsLoader.PREFIX)[1];
-            const hashBase64 = localStorage.getItem(storageFontsName[i]);
-            this.addFont(name, hashBase64);
-        }
+        Object.keys(localStorage)
+            .filter(k => k.indexOf(FontsLoader.PREFIX) > -1)
+            .forEach(k => {
+                const name = k.split(FontsLoader.PREFIX)[1];
+                this.addFont(name, localStorage.getItem(k));
+            });
     }
 
     onLoadFont(event) {
@@ -60,6 +64,7 @@ export default class FontsLoader {
         const font = new FontFace(name, 'url('+hashBase64+')',{ style: 'normal', weight: 700 });
         font.load().then((loadedFontFace) => {
             document.fonts.add(loadedFontFace);
+            // TODO: fix with React, bad way to update state
             const el = document.getElementById('fontFamily');
             const o = document.createElement('option');
             o.text = name;
@@ -76,15 +81,18 @@ export default class FontsLoader {
     }
 
     clearFonts() {
-        const storageFonts = Object.keys(localStorage)
-            .filter(k => k.indexOf(FontsLoader.PREFIX) > -1);
-        for (let i = 0, l = storageFonts.length; i < l; i++) {
-            const name = storageFonts[i];
-            localStorage.removeItem(name);
-        }
-        this.style.fontFamily = 'Arial';
+        Object.keys(localStorage)
+            .filter(k => k.indexOf(FontsLoader.PREFIX) > -1)
+            .forEach(k => {
+                const name = k.split(FontsLoader.PREFIX)[1];
+                const el = document.getElementById('fontFamily');
+                const o = el.querySelector('option[value='+name+']');
+                el.removeChild(o);
+                localStorage.removeItem(k);
+            });
+        this.style.fontFamily = FontsLoader.DEFAULT;
         m.redraw();
-        location.reload();
+        this.onrender();
     }
 
     /** @returns {HTMLDivElement} */
