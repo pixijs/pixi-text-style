@@ -6,6 +6,7 @@ import StyleNumber from './components/StyleNumber';
 import StyleSelect from './components/StyleSelect';
 import StyleStopPoints from './components/StyleStopPoints';
 import FontsLoader from './components/FontsLoader';
+import SnapDialog from './components/SnapDialog';
 import Panel from './components/Panel';
 import { deepCopy, deepEqual } from './utils';
 import m from 'mithril';
@@ -36,6 +37,9 @@ export default class TextStyleEditor {
 
         // Placeholder for URL
         this.shortenUrl = '';
+
+        // snap options are visible
+        this._snapOptions = !!localStorage.snapOptions;
 
         // Restore the values or get the defaults
         let values = {
@@ -217,11 +221,15 @@ export default class TextStyleEditor {
             <main class='main'>
                 <div class='col-sm-12'>
                     <h3>
+                        <button class='btn btn-primary btn-sm pull-right' onclick={this.onSnapToggle.bind(this)}>
+                            <span class='glyphicon glyphicon-camera'></span> Snapshot
+                        </button>
                         <span class='glyphicon glyphicon-eye-open'></span>
                         Preview
                         <small>PixiJS v{PIXI.VERSION}</small>
                     </h3>
                     <div class='renderer' id='renderer'></div>
+                    { this._snapOptions && <SnapDialog onclose={this.onSnapToggle.bind(this)} parent={this} /> }
                 </div>
                 <div class='col-sm-6'>
                     <h3>
@@ -374,6 +382,17 @@ export default class TextStyleEditor {
         this.background = this.defaultBG;
         m.redraw();
         this.app.render();
+    }
+
+    onSnapToggle() {
+        this._snapOptions = !this._snapOptions;
+        if (!this._snapOptions) {
+            localStorage.removeItem('snapOptions');
+        }
+        else {
+            localStorage.setItem('snapOptions', '1');
+        }
+        m.redraw();
     }
 
     set background(color) {
