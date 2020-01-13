@@ -183,6 +183,18 @@ h3 {
     display: block;
 }
 
+.btn-group-full {
+    display: flex;
+}
+
+.btn-group-full .btn {
+    width:100%;
+}
+
+.font-loader {
+    min-height:30px !important;
+}
+
 @media (max-width: 760px) {
     .controls {
         width: 260px;

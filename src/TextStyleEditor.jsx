@@ -5,6 +5,7 @@ import StyleColorGradient from './components/StyleColorGradient';
 import StyleNumber from './components/StyleNumber';
 import StyleSelect from './components/StyleSelect';
 import StyleStopPoints from './components/StyleStopPoints';
+import FontsLoader from './components/FontsLoader';
 import SnapDialog from './components/SnapDialog';
 import Panel from './components/Panel';
 import { deepCopy, deepEqual } from './utils';
@@ -77,7 +78,6 @@ export default class TextStyleEditor {
 
     view() {
         const codeColor = this.codeColor.bind(this);
-
         return <div oncreate={this.init.bind(this)}>
             <nav class='controls'>
                 <div class='container-fluid'>
@@ -120,6 +120,7 @@ export default class TextStyleEditor {
                             '"Courier New", Courier, monospace',
                             '"Lucida Console", Monaco, monospace'
                         ]} />
+                        <FontsLoader onrender={() => this.app.render()} style={this.style} />
                         <StyleNumber parent={this} id='fontSize' name='Font Size' step='1' min='1' />
                         <StyleSelect parent={this} id='fontStyle' name='Font Style' options={[
                             'normal',
