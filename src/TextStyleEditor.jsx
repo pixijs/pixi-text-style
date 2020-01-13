@@ -35,9 +35,6 @@ export default class TextStyleEditor {
         // Spacing type
         this.indent = parseInt(localStorage.indent) || TextStyleEditor.INDENT.SPACE_4;
 
-        // Placeholder for URL
-        this.shortenUrl = '';
-
         // snap options are visible
         this._snapOptions = !!localStorage.snapOptions;
 
@@ -277,22 +274,6 @@ export default class TextStyleEditor {
                                 </select>
                             </div>
                         </div>
-                        <div class='row config'>
-                            <label class='col-md-2 col-sm-3'>
-                                <span class='glyphicon glyphicon-share'></span>
-                                <span class='name'>Share</span>
-                            </label>
-                            <div class='col-md-10 col-sm-9'>
-                                <div class='input-group'>
-                                    <span class='input-group-btn'>
-                                        <button class='btn btn-sm btn-primary' onclick={this.onShorten.bind(this)}>
-                                            Shorten URL
-                                        </button>
-                                    </span>
-                                    <input class='form-control input-sm' type='text' value={this.shortenUrl} />
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class='col-sm-12'>
@@ -353,19 +334,6 @@ export default class TextStyleEditor {
             type: 'text/plain;charset=utf-8'
         });
         saveAs(blob, 'style.json');
-    }
-
-    onShorten() {
-        const url = 'https://www.googleapis.com/urlshortener/v1/url';
-        const key = 'AIzaSyCc-YIpSnyqr3RQcBN8-s-8u8DRXGECon0';
-        m.request({
-            method: 'POST',
-            url: `${url}?key=${key}`,
-            data: { longUrl: document.location.href }
-        })
-            .then((data) => {
-                this.shortenUrl = data.id;
-            });
     }
 
     reset() {
