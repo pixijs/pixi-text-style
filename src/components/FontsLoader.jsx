@@ -20,7 +20,7 @@ export default class FontsLoader {
         /**@type {Boolean} - prevent double click when loadind fonts */
         this._loading = false;
         this.onrender = vnode.attrs.onrender;
-        this.style = vnode.attrs.style;
+        this.text = vnode.attrs.text;
         this.initialize();
     }
 
@@ -30,11 +30,11 @@ export default class FontsLoader {
             .filter(k => k.indexOf(FontsLoader.PREFIX) > -1)
             .forEach(k => {
                 const name = k.split(FontsLoader.PREFIX)[1];
-                this.addFont(name, localStorage.getItem(k));
+                this.addFont(name, localStorage.getItem(k), true);
             });
     }
 
-    onLoadFont(event) {
+    onLoadFont(event, initializing) {
         if (this._loading) {
             return;
         }
@@ -45,7 +45,7 @@ export default class FontsLoader {
         const reader = new FileReader();
         reader.onload = (e) => {
             this.addToLocalStorage(FontsLoader.PREFIX + name, e.target.result);
-            this.addFont(name,e.target.result);
+            this.addFont(name, e.target.result, initializing);
         };
         reader.readAsDataURL(file);
         event.target.value = '';
@@ -56,11 +56,11 @@ export default class FontsLoader {
             localStorage.setItem(key, hashBase64);
         }
         catch (error) {
-            alert('Warning your local storage is full or your font exeed limit!\nThe fonts will NOT BE SAVED in your local cache.');
+            alert('addToLocalStorage failed. Your local storage is full or your font exceeds the limit!\nThe fonts will NOT BE SAVED in your local cache.');
         }
     }
 
-    addFont(name,hashBase64) {
+    addFont(name, hashBase64, initializing) {
         const font = new FontFace(name, 'url('+hashBase64+')',{ style: 'normal', weight: 700 });
         font.load().then((loadedFontFace) => {
             document.fonts.add(loadedFontFace);
@@ -70,12 +70,15 @@ export default class FontsLoader {
             o.text = name;
             o.value = name;
             el.add(o);
-            this.style.fontFamily = name;
+            if (!initializing) {
+                this.text.style.fontFamily = name;
+            }
+            this.text.updateText(); // force a texture update now that custom font has loaded
             m.redraw();
             this.onrender();
             this._loading = false;
         }).catch(function(error) {
-            alert('The font you\'re trying to load maybe too big.\n'+error);
+            alert('addFont failed. Maybe the font you are trying to load is too big?\n'+error);
             this._loading = false;
         });
     }
@@ -90,7 +93,7 @@ export default class FontsLoader {
                 el.removeChild(o);
                 localStorage.removeItem(k);
             });
-        this.style.fontFamily = FontsLoader.DEFAULT;
+        this.text.style.fontFamily = FontsLoader.DEFAULT;
         m.redraw();
         this.onrender();
     }
