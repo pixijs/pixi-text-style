@@ -120,7 +120,7 @@ export default class TextStyleEditor {
                             '"Courier New", Courier, monospace',
                             '"Lucida Console", Monaco, monospace'
                         ]} />
-                        <FontsLoader onrender={() => this.app.render()} style={this.style} />
+                        <FontsLoader onrender={() => this.app.render()} text={this.text} />
                         <StyleNumber parent={this} id='fontSize' name='Font Size' step='1' min='1' />
                         <StyleSelect parent={this} id='fontStyle' name='Font Style' options={[
                             'normal',
