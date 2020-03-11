@@ -203,6 +203,7 @@ export default class TextStyleEditor {
                         ]} />
                         <StyleNumber parent={this} id='wordWrapWidth' name='Wrap Width' step='10' min='0' />
                         <StyleNumber parent={this} id='lineHeight' name='Line Height' step='1' min='0' />
+                        <StyleNumber parent={this} id='leading' name='Leading' step='1' min='0' />
                     </Panel>
 
                     <Panel id='texture' name='Texture'>
