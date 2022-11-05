@@ -1,3 +1,4 @@
+/** @jsx m */
 import StyleColor from './StyleColor';
 import m from 'mithril';
 

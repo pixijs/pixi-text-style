@@ -1,3 +1,4 @@
+/** @jsx m */
 import StyleComponent from './StyleComponent';
 import m from 'mithril';
 

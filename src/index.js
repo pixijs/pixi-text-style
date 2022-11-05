@@ -1,4 +1,3 @@
-import './index.css';
 import './mixins/TextStyle';
 import TextStyleEditor from './TextStyleEditor';
 import m from 'mithril';

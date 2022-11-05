@@ -1,3 +1,4 @@
+/** @jsx m */
 import StyleBackgroundColor from './components/StyleBackgroundColor';
 import StyleCheckbox from './components/StyleCheckbox';
 import StyleColor from './components/StyleColor';
@@ -58,14 +59,12 @@ export default class TextStyleEditor {
             }
         }
 
-        PIXI.utils.skipHello();
         PIXI.settings.ROUND_PIXELS = true;
         this.app = new PIXI.Application({
             width: 400,
             height: 100,
             resolution: devicePixelRatio
         });
-        this.app.renderer.plugins.interaction.autoPreventDefault = false;
 
         deepCopy(this.style, values.style);
 

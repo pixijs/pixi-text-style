@@ -1,3 +1,4 @@
+/** @jsx m */
 /**
  * A collapsable pane
  * @class Panel

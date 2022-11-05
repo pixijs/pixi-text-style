@@ -1,3 +1,4 @@
+/** @jsx m */
 /**
  * Base control for style elements
  * @class StyleComponent
