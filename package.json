@@ -19,7 +19,7 @@
     "cssnano": "^3.10.0",
     "eslint": "^4.18.2",
     "eslint-plugin-react": "^7.5.1",
-    "gh-pages": "^1.1.0",
+    "gh-pages": "^4.0.0",
     "parcel": "^2.7.0",
     "rimraf": "^2.6.2"
   },
