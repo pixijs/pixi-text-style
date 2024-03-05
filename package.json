@@ -1,6 +1,6 @@
 {
   "name": "pixi-text-style",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "private": true,
   "source": "src/index.html",
   "scripts": {
